@@ -106,7 +106,7 @@ const TifoCupScene = () => {
         ref={titleRef}
         className="font-redzone text-center text-3xl md:text-8xl font-bold text-[#D3AF37] opacity-0 z-10 tracking-wider"
       >
-        MOTIONINDOOR X TIFO CUP
+        MOTIONINDOOR X TIFO CUP | 02.28.2026
       </h2>
 
       {/* Shirt image */}
@@ -135,7 +135,7 @@ const TifoCupScene = () => {
           ref={formatRef}
           className="font-redzone text-lg md:text-3xl font-medium text-white/80 opacity-0 tracking-widest"
         >
-          5V5 TOURNAMENT
+          5V5 TOURNAMENT 
         </p>
         <p
           ref={addressRef}

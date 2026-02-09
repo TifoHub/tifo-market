@@ -92,9 +92,7 @@ const MerchScene = () => {
 
       <a
         ref={buttonRef}
-        href="#"
-        target="_blank"
-        rel="noopener noreferrer"
+        href="/shop"
         className="mt-4 px-10 py-4 border-2 border-[#D3AF37] text-[#D3AF37] font-redzone text-xl md:text-2xl
                    tracking-widest uppercase opacity-0 z-10
                    transition-all duration-300
