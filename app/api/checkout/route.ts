@@ -1,9 +1,13 @@
 import Stripe from 'stripe'
 import { NextResponse } from 'next/server'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2026-01-28.clover',
-})
+function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY
+  if (!key) {
+    throw new Error('STRIPE_SECRET_KEY is not set')
+  }
+  return new Stripe(key, { apiVersion: '2026-01-28.clover' })
+}
 
 interface CheckoutItem {
   name: string
@@ -14,6 +18,8 @@ interface CheckoutItem {
 
 export async function POST(req: Request) {
   try {
+    const stripe = getStripe()
+
     const { items }: { items: CheckoutItem[] } = await req.json()
 
     if (!items || items.length === 0) {
