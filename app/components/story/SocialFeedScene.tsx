@@ -137,7 +137,7 @@ const SocialFeedScene = () => {
           <div ref={igRef} className="w-full opacity-0">
             <PlatformLabel
               icon={<Instagram size={18} />}
-              name="Instagram"
+              name="Instagram @ tifo.mrkt"
               href="https://www.instagram.com/tifo.mrkt/"
             />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
@@ -174,7 +174,7 @@ const SocialFeedScene = () => {
           <div ref={tkRef} className="w-full opacity-0">
             <PlatformLabel
               icon={<TikTokIcon className="w-[18px] h-[18px]" />}
-              name="TikTok"
+              name="TikTok @ tifo.mrkt"
               href="https://www.tiktok.com/@tifo.mrkt"
             />
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
