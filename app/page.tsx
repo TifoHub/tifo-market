@@ -5,6 +5,7 @@ import SplashScreen from "./components/ui/SplashScreen";
 import Navbar from "./components/ui/Navbar";
 import Breakdown from "./components/story/Breakdown";
 import TifoCupScene from "./components/story/TifoCupScene";
+import SocialFeedScene from "./components/story/SocialFeedScene";
 import MerchScene from "./components/story/MerchScene";
 import SponsorsScene from "./components/story/SponsorsScene";
 
@@ -18,6 +19,7 @@ export default function Home() {
         <CollectionScene />
         <TifoCupScene />
         <CommunityScene />
+        <SocialFeedScene />
         <MerchScene />
         <SponsorsScene />
       </main>

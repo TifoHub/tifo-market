@@ -2,15 +2,38 @@
 import React, { useRef, useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Instagram } from 'lucide-react'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
 }
 
+const TikTokIcon = ({ className }: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+  </svg>
+)
+
 const socialLinks = [
-  { label: 'Instagram', href: '#', icon: 'IG' },
-  { label: 'X / Twitter', href: '#', icon: 'X' },
-  { label: 'TikTok', href: '#', icon: 'TK' },
+  {
+    label: 'Instagram',
+    href: 'https://www.instagram.com/tifo.mrkt/',
+    icon: <Instagram size={20} />,
+  },
+  {
+    label: 'TikTok',
+    href: 'https://www.tiktok.com/@tifo.mrkt',
+    icon: <TikTokIcon className="w-5 h-5" />,
+  },
 ]
 
 const sponsorSlots = ['Sponsor', 'Sponsor', 'Sponsor', 'Sponsor']
