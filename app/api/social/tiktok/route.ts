@@ -1,4 +1,9 @@
 import { NextResponse } from 'next/server'
+import {
+  getTikTokAccessToken,
+  refreshTikTokToken,
+  setTikTokTokensFromRefresh,
+} from '@/lib/tiktok-auth'
 
 interface TikTokVideo {
   id: string
@@ -17,9 +22,24 @@ interface CacheEntry {
 let cache: CacheEntry | null = null
 const CACHE_TTL = 60 * 60 * 1000
 
+async function fetchTikTokVideos(accessToken: string): Promise<Response> {
+  return fetch(
+    'https://open.tiktokapis.com/v2/video/list/?fields=id,title,video_description,cover_image_url,share_url,create_time',
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ max_count: 4 }),
+      cache: 'no-store',
+    },
+  )
+}
+
 export async function GET() {
   try {
-    const token = process.env.TIKTOK_ACCESS_TOKEN
+    let token = getTikTokAccessToken()
     if (!token) {
       const dummy = Array.from({ length: 4 }, (_, i) => ({
         id: `demo-${i}`,
@@ -35,18 +55,17 @@ export async function GET() {
       return NextResponse.json({ videos: cache.data })
     }
 
-    const res = await fetch(
-      'https://open.tiktokapis.com/v2/video/list/?fields=id,title,video_description,cover_image_url,share_url,create_time',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ max_count: 4 }),
-        cache: 'no-store',
-      },
-    )
+    let res = await fetchTikTokVideos(token)
+
+    // Access token expired: refresh and retry once
+    if (res.status === 401) {
+      const refreshed = await refreshTikTokToken()
+      if (refreshed) {
+        setTikTokTokensFromRefresh(refreshed)
+        token = refreshed.accessToken
+        res = await fetchTikTokVideos(token)
+      }
+    }
 
     if (!res.ok) {
       const text = await res.text()
