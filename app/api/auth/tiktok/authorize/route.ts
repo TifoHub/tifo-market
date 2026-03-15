@@ -21,9 +21,10 @@ function generateCodeChallenge(verifier: string): string {
 
 export async function GET(request: NextRequest) {
   const clientKey = process.env.TIKTOK_CLIENT_KEY
+  // Must match TikTok Developer Portal exactly (including trailing slash or not)
   const redirectUri =
     process.env.TIKTOK_REDIRECT_URI ||
-    `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/auth/tiktok/callback`
+    `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/auth/tiktok/callback/`
 
   if (!clientKey) {
     return NextResponse.json(

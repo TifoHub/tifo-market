@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     const clientSecret = process.env.TIKTOK_CLIENT_SECRET
     const redirectUri =
       process.env.TIKTOK_REDIRECT_URI ||
-      `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/auth/tiktok/callback`
+      `${process.env.NEXT_PUBLIC_URL || 'http://localhost:3000'}/auth/tiktok/callback/`
 
     if (!clientKey || !clientSecret) {
       return NextResponse.json(
