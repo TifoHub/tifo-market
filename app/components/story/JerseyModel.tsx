@@ -15,6 +15,11 @@ interface ShaderWithWalk {
   }
 }
 
+interface WebGLShaderParams {
+  uniforms: Record<string, { value: unknown }>
+  vertexShader: string
+}
+
 const GLB_PATH = '/images/TifoJerseyV1.glb'
 
 const SMOOTH_DAMP = 8
@@ -43,7 +48,7 @@ export function JerseyModel(props: React.JSX.IntrinsicElements['group']) {
     displayScene.traverse((child) => {
       if (child instanceof Mesh && child.material) {
         const material = child.material
-        material.onBeforeCompile = (shader) => {
+        material.onBeforeCompile = (shader: WebGLShaderParams) => {
           shader.uniforms.time = { value: 0 }
           shader.uniforms.stepPhase = { value: 0 }
           shader.uniforms.walkStrength = { value: 0.48 }
