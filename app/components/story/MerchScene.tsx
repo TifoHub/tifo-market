@@ -1,6 +1,5 @@
 'use client'
 import React, { useRef, useEffect } from 'react'
-import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -65,18 +64,6 @@ const MerchScene = () => {
       ref={sectionRef}
       className="relative h-screen bg-black text-white overflow-hidden"
     >
-      {/* Background image */}
-      <div className="absolute inset-0 w-full h-full z-0">
-        <Image
-          src="/images/MerchHanged.jpg"
-          alt="Merch hang background"
-          fill
-          className="object-cover opacity-25"
-          sizes="100vw"
-          priority
-        />
-      </div>
-
       {/* Walking jersey video - full section, centered, looped, clickable */}
       <a
         href="/shop"
