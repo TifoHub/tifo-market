@@ -75,7 +75,7 @@ const MerchScene = () => {
       </div>
 
       {/* MERCH - above model */}
-      <div className="absolute top-8 md:top-12 left-0 right-0 flex justify-center z-10">
+      <div className="absolute top-16 md:top-12 left-0 right-0 flex justify-center z-10">
         <h2
           ref={titleRef}
           className="font-redzone text-6xl md:text-8xl font-bold text-[#D3AF37] opacity-0 tracking-wider"
@@ -85,7 +85,7 @@ const MerchScene = () => {
       </div>
 
       {/* Rep the culture + CTA - below model */}
-      <div className="absolute bottom-8 md:bottom-12 left-0 right-0 flex flex-col items-center gap-4 z-10">
+      <div className="absolute bottom-16 md:bottom-12 left-0 right-0 flex flex-col items-center gap-2 md:gap-4 z-10">
         <p
           ref={taglineRef}
           className="font-barlow text-xl md:text-2xl text-white/70 tracking-widest uppercase opacity-0"
