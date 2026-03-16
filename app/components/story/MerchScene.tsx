@@ -1,8 +1,12 @@
 'use client'
 import React, { useRef, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import Image from 'next/image'
+
+const MerchScene3D = dynamic(() => import('./MerchScene3D').then((m) => m.MerchScene3D), {
+  ssr: false,
+})
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -63,43 +67,42 @@ const MerchScene = () => {
     <section
       id="merch"
       ref={sectionRef}
-      className="relative h-screen flex flex-col items-center justify-center gap-6 bg-black text-white overflow-hidden"
+      className="relative h-screen bg-black text-white overflow-hidden"
     >
-      {/* Background image */}
-      <div className="absolute inset-0 w-full h-full">
-        <Image
-          src="/images/merch1.jpg"
-          alt="Merch background"
-          fill
-          className="object-cover opacity-30"
-          sizes="100vw"
-        />
+      {/* 3D Jersey model - full section, centered and rotating */}
+      <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
+        <MerchScene3D />
       </div>
 
-      <h2
-        ref={titleRef}
-        className="font-redzone text-6xl md:text-8xl font-bold text-[#D3AF37] opacity-0 z-10 tracking-wider"
-      >
-        MERCH
-      </h2>
+      {/* MERCH - above model */}
+      <div className="absolute top-8 md:top-12 left-0 right-0 flex justify-center z-10">
+        <h2
+          ref={titleRef}
+          className="font-redzone text-6xl md:text-8xl font-bold text-[#D3AF37] opacity-0 tracking-wider"
+        >
+          MERCH
+        </h2>
+      </div>
 
-      <p
-        ref={taglineRef}
-        className="font-barlow text-xl md:text-2xl text-white/70 tracking-widest uppercase opacity-0 z-10"
-      >
-        Rep the culture.
-      </p>
-
-      <a
-        ref={buttonRef}
-        href="/shop"
-        className="mt-4 px-10 py-4 border-2 border-[#D3AF37] text-[#D3AF37] font-redzone text-xl md:text-2xl
-                   tracking-widest uppercase opacity-0 z-10
-                   transition-all duration-300
-                   hover:bg-[#D3AF37] hover:text-black hover:shadow-[0_0_30px_rgba(211,175,55,0.4)]"
-      >
-        SHOP NOW
-      </a>
+      {/* Rep the culture + CTA - below model */}
+      <div className="absolute bottom-8 md:bottom-12 left-0 right-0 flex flex-col items-center gap-4 z-10">
+        <p
+          ref={taglineRef}
+          className="font-barlow text-xl md:text-2xl text-white/70 tracking-widest uppercase opacity-0"
+        >
+          Rep the culture.
+        </p>
+        <a
+          ref={buttonRef}
+          href="/shop"
+          className="px-10 py-4 border-2 border-[#D3AF37] text-[#D3AF37] font-redzone text-xl md:text-2xl
+                     tracking-widest uppercase opacity-0
+                     transition-all duration-300
+                     hover:bg-[#D3AF37] hover:text-black hover:shadow-[0_0_30px_rgba(211,175,55,0.4)]"
+        >
+          SHOP NOW
+        </a>
+      </div>
     </section>
   )
 }
