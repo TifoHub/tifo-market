@@ -3,7 +3,7 @@
 import React, { useRef, useMemo, useEffect } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
-import { Box3, Vector3, Euler } from 'three'
+import { Box3, Vector3, Euler, Mesh } from 'three'
 import type { Group } from 'three'
 
 interface ShaderWithWalk {
@@ -41,7 +41,7 @@ export function JerseyModel(props: React.JSX.IntrinsicElements['group']) {
   // Apply vertex shader: floating walk - step-synced folds, hem sway, gentle float
   useEffect(() => {
     displayScene.traverse((child) => {
-      if (child.isMesh && child.material) {
+      if (child instanceof Mesh && child.material) {
         const material = child.material
         material.onBeforeCompile = (shader) => {
           shader.uniforms.time = { value: 0 }
