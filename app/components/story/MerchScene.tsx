@@ -1,13 +1,8 @@
 'use client'
 import React, { useRef, useEffect } from 'react'
-import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-const MerchScene3D = dynamic(() => import('./MerchScene3D').then((m) => m.MerchScene3D), {
-  ssr: false,
-})
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -82,10 +77,20 @@ const MerchScene = () => {
         />
       </div>
 
-      {/* 3D Jersey model - full section, centered and rotating, clickable */}
-      <div className="absolute inset-0 w-full h-full z-1">
-        <MerchScene3D />
-      </div>
+      {/* Walking jersey video - full section, centered, looped, clickable */}
+      <a
+        href="/shop"
+        className="absolute inset-0 w-full h-full z-1 flex items-center justify-center cursor-pointer"
+      >
+        <video
+          src="/images/WalkingJersey.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-contain pointer-events-none"
+        />
+      </a>
 
       {/* MERCH - above model */}
       <div className="absolute top-16 md:top-12 left-0 right-0 flex justify-center z-10">
