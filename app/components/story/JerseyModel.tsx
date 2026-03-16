@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useRef, useMemo, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import { Box3, Vector3, Euler, Mesh } from 'three'
@@ -25,10 +26,13 @@ const GLB_PATH = '/images/TifoJerseyV1.glb'
 const SMOOTH_DAMP = 8
 
 export function JerseyModel(props: React.JSX.IntrinsicElements['group']) {
+  const router = useRouter()
   const groupRef = useRef<Group>(null)
   const spinGroupRef = useRef<Group>(null)
   const smoothPos = useRef(new Vector3(0, 0, 0))
   const smoothRot = useRef(new Euler(0, 0, 0))
+
+  const goToShop = () => router.push('/shop')
 
   const { scene } = useGLTF(GLB_PATH)
 
@@ -159,7 +163,18 @@ export function JerseyModel(props: React.JSX.IntrinsicElements['group']) {
   })
 
   return (
-    <group ref={groupRef} {...props}>
+    <group
+      ref={groupRef}
+      {...props}
+      onClick={goToShop}
+      onPointerOver={(e) => {
+        e.stopPropagation()
+        document.body.style.cursor = 'pointer'
+      }}
+      onPointerOut={() => {
+        document.body.style.cursor = 'default'
+      }}
+    >
       <group ref={spinGroupRef}>
         <primitive object={displayScene} position={offset} />
       </group>

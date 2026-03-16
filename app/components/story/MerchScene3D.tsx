@@ -22,7 +22,7 @@ export function MerchScene3D() {
 
   return (
     <div
-      className="absolute inset-0 w-full h-full min-h-[400px] pointer-events-none"
+      className="absolute inset-0 w-full h-full min-h-[400px]"
       style={{ minHeight: '100%' }}
     >
       <Canvas

@@ -82,8 +82,8 @@ const MerchScene = () => {
         />
       </div>
 
-      {/* 3D Jersey model - full section, centered and rotating */}
-      <div className="absolute inset-0 w-full h-full z-1 pointer-events-none">
+      {/* 3D Jersey model - full section, centered and rotating, clickable */}
+      <div className="absolute inset-0 w-full h-full z-1">
         <MerchScene3D />
       </div>
 
