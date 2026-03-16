@@ -8,10 +8,10 @@ import type { Group } from 'three'
 
 interface ShaderWithWalk {
   uniforms: {
-    time?: { value: number }
-    stepPhase?: { value: number }
-    walkStrength?: { value: number }
-    floatPhase?: { value: number }
+    time: { value: number }
+    stepPhase: { value: number }
+    walkStrength: { value: number }
+    floatPhase: { value: number }
   }
 }
 
@@ -107,7 +107,7 @@ export function JerseyModel(props: React.JSX.IntrinsicElements['group']) {
             `
           )
 
-          ;(child.userData as { shader?: ShaderWithWalk }).shader = shader
+          ;(child.userData as { shader?: ShaderWithWalk }).shader = shader as unknown as ShaderWithWalk
         }
       }
     })
@@ -150,7 +150,7 @@ export function JerseyModel(props: React.JSX.IntrinsicElements['group']) {
 
     displayScene.traverse((child) => {
       const shader = (child.userData as { shader?: ShaderWithWalk }).shader
-      if (shader) {
+      if (shader?.uniforms) {
         shader.uniforms.time.value = t
         shader.uniforms.stepPhase.value = stepPhase
         shader.uniforms.floatPhase.value = floatPhase
