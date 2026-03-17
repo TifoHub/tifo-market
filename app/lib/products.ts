@@ -4,6 +4,9 @@ export interface Product {
   id: string
   name: string
   description: string
+  details?: string
+  images?: string[]
+  video?: string
   price: number // in cents
   image: string
   category: 'apparel' | 'accessories' | 'collectibles'
@@ -12,38 +15,90 @@ export interface Product {
 
 export const products: Product[] = [
   {
-    id: 'tournament-jersey',
-    name: 'Tournament Jersey',
-    description: 'Official Tifo Market tournament jersey. Breathable fabric, bold design.',
-    price: 5500,
+    id: 'mint-dallas-futbol-tee',
+    name: 'Mint - Dallas Futbol Tee',
+    description:
+      'Premium t-shirt representing the greens of the pitch, getting you as game-ready as you feel—whether you are scoring bangers or grabbing coffee at the Kit Swap.',
+    details:
+      '- 100% Cotton\n- Machine wash cold with like colors\n- Do not iron on design\n- Tumble dry low, hang dry if possible\n\nAvailable: 1×S, 3×M, 1×XL, 1×XXL',
+    price: 4000,
     image: '/images/products/Jersey.jpg',
+    images: ['/images/products/Jersey.jpg'],
     category: 'apparel',
     sizes: ['S', 'M', 'L', 'XL', '2XL'],
   },
   {
-    id: 'tournament-day-tee',
-    name: 'Tourney Day Tee',
-    description: 'Premium cotton tee. Relaxed fit, made for the terraces.',
-    price: 3500,
-    image: '/images/products/TourneyShirt.png',
+    id: 'vintage-black-dallas-futbol-tee',
+    name: 'Vintage Black - Dallas Futbol Tee',
+    description:
+      'From the streets to the rooftop, this oversized t-shirt is a solid choice for a vintage feel.',
+    details:
+      '- 100% Cotton\n- Machine wash cold with like colors\n- Do not iron on design\n- Tumble dry low, hang dry if possible\n\nAvailable: 4×M, 2×L, 1×XL',
+    price: 4000,
+    image: '/images/products/VintageBlackFront.jpg',
+    images: [
+      '/images/products/VintageBlackFront.jpg',
+      '/images/products/VintageBlackback.jpg',
+    ],
+    video: '/images/WalkingJersey.mp4',
     category: 'apparel',
     sizes: ['S', 'M', 'L', 'XL', '2XL'],
   },
   {
-    id: 'culture-hoodie',
-    name: 'Culture Hoodie',
-    description: 'Heavyweight cotton hoodie with embroidered Tifo crest.',
-    price: 7500,
+    id: 'washed-red-dallas-futbol-tee',
+    name: 'Washed Red - Dallas Futbol Tee',
+    description:
+      'Oversized t-shirt for the fans of the game who love to show their passion.',
+    details:
+      '- 100% Cotton\n- Machine wash cold with like colors\n- Do not iron on design\n- Tumble dry low, hang dry if possible\n\nAvailable: 1×M, 3×L, 1×XL, 1×XXL',
+    price: 4000,
     image: '/images/products/TifoHoodie.jpg',
+    images: ['/images/products/TifoHoodie.jpg'],
     category: 'apparel',
     sizes: ['S', 'M', 'L', 'XL', '2XL'],
   },
   {
-    id: 'match-day-tee',
-    name: 'Match Day Tee',
-    description: 'Premium cotton tee. Relaxed fit, made for the terraces.',
+    id: 'dallas-tifo-market-tee',
+    name: 'Dallas TIFO Market Tee',
+    description:
+      'Classic t-shirt repping the home team—no matter where you are rocking the shirt, remember that you are Always at Home.',
+    details:
+      '- 100% Cotton\n- Machine wash cold with like colors\n- Do not iron on design\n- Tumble dry low, hang dry if possible\n\nAvailable: 4×S, 7×M, 5×L, 2×XL, 1×XXL',
     price: 3500,
-    image: '/images/placeholder-product.svg',
+    image: '/images/products/RegularTeeFront.jpg',
+    images: [
+      '/images/products/RegularTeeFront.jpg',
+      '/images/products/RegularTeeBAck.jpg',
+    ],
+    category: 'apparel',
+    sizes: ['S', 'M', 'L', 'XL', '2XL'],
+  },
+  {
+    id: 'tifo-cup-champions-tee',
+    name: 'TIFO Cup Champions Tee',
+    description:
+      'Built for champions on and off the pitch. TIFO CUP design on premium Shaka Wear Max Heavy t-shirt, preshrunk for a consistent fit.',
+    details:
+      '- 100% Cotton\n- Machine wash cold with like colors\n- Do not bleach\n- Do not iron on design\n- Tumble dry low, hang dry if possible\n\nAvailable: 6×S, 9×M, 8×L, 4×XL, 4×XXL',
+    price: 4500,
+    image: '/images/products/TourneyShirt.png',
+    images: ['/images/products/TourneyShirt.png'],
+    category: 'apparel',
+    sizes: ['S', 'M', 'L', 'XL', '2XL'],
+  },
+  {
+    id: 'dallas-futbol-hoodie',
+    name: 'Dallas Futbol Hoodie',
+    description:
+      'Cozy hoodie repping the Dallas footy culture—for the cold nights on the pitch and those times you need a classic black hoodie to complete the fit.',
+    details:
+      '- 60% Cotton\n- 40% Polyester\n- Machine wash cold with like colors\n- Do not iron on design\n- Tumble dry low\n\nAvailable: 1×S, 4×M, 5×L, 1×XL',
+    price: 4500,
+    image: '/images/products/HoodieFront.jpg',
+    images: [
+      '/images/products/HoodieFront.jpg',
+      '/images/products/HoodieBack.jpg',
+    ],
     category: 'apparel',
     sizes: ['S', 'M', 'L', 'XL', '2XL'],
   },
@@ -61,7 +116,7 @@ export const products: Product[] = [
     description: 'Structured snapback with embroidered logo. One size fits all.',
     price: 3000,
     image: '/images/placeholder-product.svg',
-    category: 'accessories'
+    category: 'accessories',
   },
   {
     id: 'match-poster',
