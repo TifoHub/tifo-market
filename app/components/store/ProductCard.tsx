@@ -45,6 +45,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   type Media =
     | {
         type: 'video'
+        src: string
       }
     | {
         type: 'image'
@@ -53,7 +54,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   const getMediaForIndex = (index: number): Media => {
     if (hasVideo && index === 0) {
-      return { type: 'video' }
+      return { type: 'video', src: product.video ?? '' }
     }
 
     const imageIndex = hasVideo ? index - 1 : index
