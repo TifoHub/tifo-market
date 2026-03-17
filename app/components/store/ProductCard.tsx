@@ -110,7 +110,6 @@ export default function ProductCard({ product }: ProductCardProps) {
                   muted
                   loop
                   playsInline
-                  controls
                 />
               </div>
             )
