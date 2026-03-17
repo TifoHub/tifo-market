@@ -42,17 +42,26 @@ export default function ProductCard({ product }: ProductCardProps) {
   const hasImages = !!product.images && product.images.length > 0
   const totalSlides = (hasVideo ? 1 : 0) + (hasImages ? product.images!.length : 0)
 
-  const getMediaForIndex = (index: number) => {
+  type Media =
+    | {
+        type: 'video'
+      }
+    | {
+        type: 'image'
+        src: string
+      }
+
+  const getMediaForIndex = (index: number): Media => {
     if (hasVideo && index === 0) {
-      return { type: 'video' as const }
+      return { type: 'video' }
     }
 
     const imageIndex = hasVideo ? index - 1 : index
     if (hasImages && imageIndex >= 0 && imageIndex < product.images!.length) {
-      return { type: 'image' as const, src: product.images![imageIndex] }
+      return { type: 'image', src: product.images![imageIndex] }
     }
 
-    return { type: 'image' as const, src: product.image }
+    return { type: 'image', src: product.image }
   }
 
   return (
