@@ -9,23 +9,23 @@ if (typeof window !== 'undefined') {
 }
 
 const topRowImages = [
-  { src: '/images/Community1 (1).JPG', alt: 'Community Event' },
-  { src: '/images/Community1 (2).JPG', alt: 'Community Event' },
-  { src: '/images/Community1 (3).JPG', alt: 'Community Event' },
-  { src: '/images/Community1 (4).jpg', alt: 'Community Event' },
-  { src: '/images/Community2.jpg', alt: 'Community Event' },
-  { src: '/images/Community6 (1).jpg', alt: 'Community Event' },
-  { src: '/images/Community6 (2).jpg', alt: 'Community Event' },
+  { src: '/images/community/Community1 (1).JPG', alt: 'Community Event' },
+  { src: '/images/community/Community1 (2).JPG', alt: 'Community Event' },
+  { src: '/images/community/Community1 (3).JPG', alt: 'Community Event' },
+  { src: '/images/community/Community1 (4).jpg', alt: 'Community Event' },
+  { src: '/images/community/Community2.jpg', alt: 'Community Event' },
+  { src: '/images/community/Community6 (1).jpg', alt: 'Community Event' },
+  { src: '/images/community/Community6 (2).jpg', alt: 'Community Event' },
 ]
 
 const bottomRowImages = [
-  { src: '/images/Community1 (5).jpg', alt: 'Community Event' },
-  { src: '/images/Community1 (6).jpg', alt: 'Community Event' },
-  { src: '/images/Community1 (7).jpg', alt: 'Community Event' },
-  { src: '/images/Community3.jpg', alt: 'Community Event' },
-  { src: '/images/Community6 (1) (1).jpg', alt: 'Community Event' },
-  { src: '/images/Community6 (3).jpg', alt: 'Community Event' },
-  { src: '/images/Community6 (4).jpg', alt: 'Community Event' },
+  { src: '/images/community/Community1 (5).jpg', alt: 'Community Event' },
+  { src: '/images/community/Community1 (6).jpg', alt: 'Community Event' },
+  { src: '/images/community/Community1 (7).jpg', alt: 'Community Event' },
+  { src: '/images/community/Community3.jpg', alt: 'Community Event' },
+  { src: '/images/community/Community6 (1) (1).jpg', alt: 'Community Event' },
+  { src: '/images/community/Community6 (3).jpg', alt: 'Community Event' },
+  { src: '/images/community/Community6 (4).jpg', alt: 'Community Event' },
 ]
 
 const CommunityScene = () => {

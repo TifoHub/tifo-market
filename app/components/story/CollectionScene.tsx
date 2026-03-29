@@ -10,16 +10,16 @@ if (typeof window !== 'undefined') {
 
 // Add your jersey images here — as many as you want
 const jerseyImages = [
-  { src: '/images/SingleJersey.jpg', alt: 'Single Jersey' },
-  { src: '/images/Jerseys.jpg', alt: 'Jerseys' },
-  { src: '/images/Memorbila.jpg', alt: 'Memorabilia' },
-  { src: '/images/Rack.jpg', alt: 'Jersey Rack' },
-  { src: '/images/Cleats.jpg', alt: 'Cleats' },
-  { src: '/images/BackPack.jpg', alt: 'Backpack' },
-  { src: '/images/Clash.jpg', alt: 'Clash' },
-  { src: '/images/Cups.jpg', alt: 'Cups' },
-  { src: '/images/Poster.jpg', alt: 'Poster' },
-  { src: '/images/Rack2.jpg', alt: 'Jersey Rack' },
+  { src: '/images/story/SingleJersey.jpg', alt: 'Single Jersey' },
+  { src: '/images/story/Jerseys.jpg', alt: 'Jerseys' },
+  { src: '/images/story/Memorbila.jpg', alt: 'Memorabilia' },
+  { src: '/images/story/Rack.jpg', alt: 'Jersey Rack' },
+  { src: '/images/story/Cleats.jpg', alt: 'Cleats' },
+  { src: '/images/story/BackPack.jpg', alt: 'Backpack' },
+  { src: '/images/story/Clash.jpg', alt: 'Clash' },
+  { src: '/images/story/Cups.jpg', alt: 'Cups' },
+  { src: '/images/story/Poster.jpg', alt: 'Poster' },
+  { src: '/images/story/Rack2.jpg', alt: 'Jersey Rack' },
 ]
 
 const CollectionScene = () => {
@@ -137,7 +137,7 @@ const CollectionScene = () => {
             <div
               key={i}
               className="relative w-60 h-80
-               md:w-64 md:h-80 flex-shrink-0"
+               md:w-64 md:h-80 shrink-0"
             >
               <Image
                 src={img.src}

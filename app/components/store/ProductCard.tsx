@@ -8,12 +8,14 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useCart } from '@/app/context/CartContext'
 import { formatPrice, type Product, type Size } from '@/app/lib/products'
+import type { InventoryMap } from '@/app/lib/supabase'
 
 interface ProductCardProps {
   product: Product
+  inventoryMap?: InventoryMap
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, inventoryMap }: ProductCardProps) {
   const { addItem } = useCart()
   const [added, setAdded] = useState(false)
   const [selectedSize, setSelectedSize] = useState<Size | undefined>(
@@ -25,8 +27,26 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   const needsSize = product.sizes && product.sizes.length > 0
 
+  // Inventory helpers
+  const productInventory = inventoryMap?.[product.id]
+
+  const isSizeSoldOut = (size: Size): boolean => {
+    if (!productInventory) return false
+    return (productInventory[size] ?? 0) <= 0
+  }
+
+  const isSoldOut = (() => {
+    if (!productInventory) return false
+    if (needsSize && product.sizes) {
+      return product.sizes.every((size) => isSizeSoldOut(size))
+    }
+    return (productInventory['one-size'] ?? 0) <= 0
+  })()
+
   const handleAdd = () => {
+    if (isSoldOut) return
     if (needsSize && !selectedSize) return
+    if (selectedSize && isSizeSoldOut(selectedSize)) return
     addItem(product, selectedSize)
     setAdded(true)
     setTimeout(() => setAdded(false), 1500)
@@ -39,8 +59,10 @@ export default function ProductCard({ product }: ProductCardProps) {
   }
 
   const hasVideo = !!product.video
-  const hasImages = !!product.images && product.images.length > 0
-  const totalSlides = (hasVideo ? 1 : 0) + (hasImages ? product.images!.length : 0)
+  const imageSlides = product.images && product.images.length > 0
+    ? product.images
+    : [product.image]
+  const totalSlides = imageSlides.length + (hasVideo ? 1 : 0)
 
   type Media =
     | {
@@ -53,23 +75,33 @@ export default function ProductCard({ product }: ProductCardProps) {
       }
 
   const getMediaForIndex = (index: number): Media => {
-    if (hasVideo && index === 0) {
-      return { type: 'video', src: product.video ?? '' }
+    // Keep image first, then video, then remaining images.
+    if (hasVideo) {
+      if (index === 0) {
+        return { type: 'image', src: imageSlides[0] }
+      }
+      if (index === 1) {
+        return { type: 'video', src: product.video ?? '' }
+      }
+
+      const trailingImageIndex = index - 1
+      if (trailingImageIndex >= 0 && trailingImageIndex < imageSlides.length) {
+        return { type: 'image', src: imageSlides[trailingImageIndex] }
+      }
     }
 
-    const imageIndex = hasVideo ? index - 1 : index
-    if (hasImages && imageIndex >= 0 && imageIndex < product.images!.length) {
-      return { type: 'image', src: product.images![imageIndex] }
+    if (index >= 0 && index < imageSlides.length) {
+      return { type: 'image', src: imageSlides[index] }
     }
 
-    return { type: 'image', src: product.image }
+    return { type: 'image', src: imageSlides[0] }
   }
 
   return (
     <Card className="group overflow-hidden border-white/10 bg-zinc-950 text-white transition-all duration-300 hover:border-[#D3AF37]/40 hover:shadow-[0_0_30px_rgba(211,175,55,0.08)]">
       {/* Product Images / Carousel */}
       <div
-        className="relative aspect-[3/4] overflow-hidden bg-zinc-900"
+        className="relative aspect-3/4 overflow-hidden bg-zinc-900"
         onTouchStart={(e) => {
           if (!totalSlides || totalSlides <= 1) return
           touchStartX.current = e.touches[0].clientX
@@ -140,6 +172,12 @@ export default function ProductCard({ product }: ProductCardProps) {
         >
           {categoryLabel[product.category]}
         </Badge>
+
+        {isSoldOut && (
+          <Badge className="absolute top-3 right-3 bg-red-600 text-white border-0 text-[10px] uppercase tracking-widest">
+            Sold Out
+          </Badge>
+        )}
 
         {totalSlides > 1 && (
           <div className="absolute inset-x-3 bottom-3 flex items-center justify-between gap-2">
@@ -217,20 +255,25 @@ export default function ProductCard({ product }: ProductCardProps) {
               Size
             </p>
             <div className="flex flex-wrap gap-2">
-              {product.sizes!.map((size) => (
-                <button
-                  key={size}
-                  onClick={() => setSelectedSize(size)}
-                  className={`h-9 min-w-10 px-3 rounded-md border text-xs font-barlow font-medium uppercase tracking-wider transition-all duration-200
-                    ${
-                      selectedSize === size
-                        ? 'border-[#D3AF37] bg-[#D3AF37]/10 text-[#D3AF37]'
-                        : 'border-white/10 text-zinc-400 hover:border-white/30 hover:text-white'
-                    }`}
-                >
-                  {size}
-                </button>
-              ))}
+              {product.sizes!.map((size) => {
+                const soldOut = isSizeSoldOut(size)
+                return (
+                  <button
+                    key={size}
+                    onClick={() => !soldOut && setSelectedSize(size)}
+                    disabled={soldOut}
+                    className={`h-9 min-w-10 px-3 rounded-md border text-xs font-barlow font-medium uppercase tracking-wider transition-all duration-200
+                      ${soldOut
+                        ? 'border-white/5 text-zinc-600 opacity-40 cursor-not-allowed line-through'
+                        : selectedSize === size
+                          ? 'border-[#D3AF37] bg-[#D3AF37]/10 text-[#D3AF37]'
+                          : 'border-white/10 text-zinc-400 hover:border-white/30 hover:text-white'
+                      }`}
+                  >
+                    {size}
+                  </button>
+                )
+              })}
             </div>
           </div>
         )}
@@ -240,15 +283,19 @@ export default function ProductCard({ product }: ProductCardProps) {
       <CardFooter className="px-5 pb-5 pt-3">
         <Button
           onClick={handleAdd}
-          disabled={needsSize && !selectedSize}
+          disabled={isSoldOut || (needsSize && (!selectedSize || isSizeSoldOut(selectedSize!)))}
           className={`w-full font-barlow uppercase tracking-wider text-sm transition-all duration-300 ${
-            added
-              ? 'bg-emerald-600 hover:bg-emerald-600 text-white'
-              : 'bg-[#D3AF37] hover:bg-[#c4a030] text-black disabled:opacity-40 disabled:cursor-not-allowed'
+            isSoldOut
+              ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed opacity-60'
+              : added
+                ? 'bg-emerald-600 hover:bg-emerald-600 text-white'
+                : 'bg-[#D3AF37] hover:bg-[#c4a030] text-black disabled:opacity-40 disabled:cursor-not-allowed'
           }`}
           size="lg"
         >
-          {added ? (
+          {isSoldOut ? (
+            'Sold Out'
+          ) : added ? (
             <>
               <Check className="size-4" />
               Added to Cart

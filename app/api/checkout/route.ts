@@ -10,6 +10,8 @@ function getStripe() {
 }
 
 interface CheckoutItem {
+  productId: string
+  size: string
   name: string
   price: number
   quantity: number
@@ -33,6 +35,10 @@ export async function POST(req: Request) {
           currency: 'usd',
           product_data: {
             name: item.name,
+            metadata: {
+              product_id: item.productId,
+              size: item.size,
+            },
             ...(item.image.startsWith('http') ? { images: [item.image] } : {}),
           },
           unit_amount: item.price,

@@ -58,7 +58,7 @@ const Breakdown = () => {
       {/* Background image */}
       <div className="absolute inset-0 w-full h-full">
         <Image
-          src="/images/originsBG.jpg"
+          src="/images/story/originsBG.jpg"
           alt="Origins background"
           fill
           className="object-cover opacity-20"

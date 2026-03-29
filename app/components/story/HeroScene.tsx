@@ -39,7 +39,7 @@ const HeroScene = () => {
     <section ref={sectionRef} className="relative h-screen overflow-hidden">
       <div ref={imageRef} className="absolute inset-0 w-full h-full opacity-0">
         <Image
-          src="/images/Hero.jpg"
+          src="/images/story/Hero.jpg"
           alt="Dallas Tifo Market"
           fill
           className="object-cover"

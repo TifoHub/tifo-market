@@ -1,5 +1,6 @@
 import Stripe from 'stripe'
 import { NextResponse } from 'next/server'
+import { createServerClient } from '@/app/lib/supabase'
 
 function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY
@@ -7,6 +8,46 @@ function getStripe() {
     throw new Error('STRIPE_SECRET_KEY is not set')
   }
   return new Stripe(key, { apiVersion: '2026-01-28.clover' })
+}
+
+async function decrementInventory(
+  sessionId: string,
+  stripe: Stripe,
+) {
+  const supabase = createServerClient()
+
+  // Retrieve all line items for this session, expanding the product to get metadata
+  const lineItems = await stripe.checkout.sessions.listLineItems(sessionId, {
+    expand: ['data.price.product'],
+    limit: 100,
+  })
+
+  for (const item of lineItems.data) {
+    const product = item.price?.product as Stripe.Product | null
+    if (!product || product.deleted) continue
+
+    const productId = product.metadata?.product_id
+    const size = product.metadata?.size
+    if (!productId || !size) continue
+
+    const qty = item.quantity ?? 1
+
+    // Decrement quantity, floor at 0
+    const { error } = await supabase.rpc('decrement_inventory', {
+      p_product_id: productId,
+      p_size: size,
+      p_qty: qty,
+    })
+
+    if (error) {
+      console.error(
+        `Failed to decrement inventory for ${productId} (${size}):`,
+        error,
+      )
+    } else {
+      console.log(`Decremented inventory: ${productId} (${size}) by ${qty}`)
+    }
+  }
 }
 
 export async function POST(req: Request) {
@@ -53,7 +94,15 @@ export async function POST(req: Request) {
       // TODO: Fulfill the order
       // - Save order to database
       // - Send confirmation email
-      // - Update inventory
+
+      // Decrement inventory for purchased items
+      try {
+        await decrementInventory(session.id, stripe)
+      } catch (err) {
+        console.error('Failed to decrement inventory:', err)
+        // Don't return an error — payment succeeded, inventory update is best-effort
+      }
+
       break
     }
 

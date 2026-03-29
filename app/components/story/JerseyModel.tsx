@@ -21,7 +21,7 @@ interface WebGLShaderParams {
   vertexShader: string
 }
 
-const GLB_PATH = '/images/TifoJerseyV1.glb'
+const GLB_PATH = '/images/story/models/TifoJerseyV1.glb'
 
 const SMOOTH_DAMP = 14
 

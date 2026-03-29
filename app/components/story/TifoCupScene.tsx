@@ -93,7 +93,7 @@ const TifoCupScene = () => {
       {/* Background image */}
       <div className="absolute inset-0 w-full h-full">
         <Image
-          src="/images/Indoor.jpg"
+          src="/images/story/Indoor.jpg"
           alt="Indoor field background"
           fill
           className="object-cover opacity-20"
@@ -112,10 +112,10 @@ const TifoCupScene = () => {
       {/* Shirt image */}
       <div
         ref={shirtRef}
-        className="relative w-80 h-60 md:w-[28rem] md:h-[32rem] my-2 md:my-6 opacity-0 z-10"
+        className="relative w-80 h-60 md:w-md md:h-128 my-2 md:my-6 opacity-0 z-10"
       >
         <Image
-          src="/images/TourneyShirt.png"
+          src="/images/products/TourneyShirt.png"
           alt="Tifo Cup Shirt"
           fill
           className="object-contain"

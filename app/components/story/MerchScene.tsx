@@ -70,7 +70,7 @@ const MerchScene = () => {
         className="absolute inset-0 w-full h-full z-1 flex items-center justify-center cursor-pointer"
       >
         <video
-          src="/images/WalkingJersey.mp4"
+          src="/images/story/WalkingJersey.mp4"
           autoPlay
           loop
           muted

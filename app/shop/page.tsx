@@ -1,12 +1,14 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import ProductCard from '@/app/components/store/ProductCard'
 import CartSheet from '@/app/components/store/CartSheet'
 import { products, type Product } from '@/app/lib/products'
+import type { InventoryMap } from '@/app/lib/supabase'
+import { createPublicClient } from '@/app/lib/supabase'
 
 type Category = 'all' | Product['category']
 
@@ -19,6 +21,52 @@ const categories: { value: Category; label: string }[] = [
 
 export default function ShopPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('all')
+  const [inventoryMap, setInventoryMap] = useState<InventoryMap>({})
+
+  useEffect(() => {
+    const supabase = createPublicClient()
+
+    // Initial load
+    supabase
+      .from('inventory')
+      .select('product_id, size, quantity')
+      .then(({ data }) => {
+        if (!data) return
+        const map: InventoryMap = {}
+        for (const row of data) {
+          if (!map[row.product_id]) map[row.product_id] = {}
+          map[row.product_id][row.size] = row.quantity
+        }
+        setInventoryMap(map)
+      })
+
+    // Real-time subscription — fires whenever a row is updated (e.g. after a purchase)
+    const channel = supabase
+      .channel('inventory-changes')
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'inventory' },
+        (payload) => {
+          const { product_id, size, quantity } = payload.new as {
+            product_id: string
+            size: string
+            quantity: number
+          }
+          setInventoryMap((prev) => ({
+            ...prev,
+            [product_id]: {
+              ...prev[product_id],
+              [size]: quantity,
+            },
+          }))
+        },
+      )
+      .subscribe()
+
+    return () => {
+      supabase.removeChannel(channel)
+    }
+  }, [])
 
   const filtered =
     activeCategory === 'all'
@@ -88,7 +136,11 @@ export default function ShopPage() {
       <main className="mx-auto max-w-7xl px-6 py-12">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              inventoryMap={inventoryMap}
+            />
           ))}
         </div>
 

@@ -32,6 +32,8 @@ export default function CartSheet() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           items: items.map((item) => ({
+            productId: item.product.id,
+            size: item.size ?? 'one-size',
             name: item.size
               ? `${item.product.name} (${item.size})`
               : item.product.name,
