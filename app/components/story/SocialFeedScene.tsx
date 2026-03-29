@@ -2,7 +2,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { Instagram, ExternalLink } from 'lucide-react'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -23,14 +22,6 @@ const TikTokIcon = ({ className }: { className?: string }) => (
   </svg>
 )
 
-interface IGPost {
-  id: string
-  caption: string
-  media_url: string
-  permalink: string
-  timestamp: string
-}
-
 interface TKVideo {
   id: string
   title: string
@@ -42,26 +33,19 @@ interface TKVideo {
 const SocialFeedScene = () => {
   const sectionRef = useRef<HTMLElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
-  const igRef = useRef<HTMLDivElement>(null)
   const tkRef = useRef<HTMLDivElement>(null)
 
-  const [igPosts, setIgPosts] = useState<IGPost[]>([])
   const [tkVideos, setTkVideos] = useState<TKVideo[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function fetchFeeds() {
       try {
-        const [igRes, tkRes] = await Promise.allSettled([
-          fetch('/api/social/instagram').then((r) => r.json()),
-          fetch('/api/social/tiktok').then((r) => r.json()),
-        ])
-
-        if (igRes.status === 'fulfilled' && igRes.value.posts?.length) {
-          setIgPosts(igRes.value.posts)
-        }
-        if (tkRes.status === 'fulfilled' && tkRes.value.videos?.length) {
-          setTkVideos(tkRes.value.videos)
+        // Instagram disabled for now:
+        // fetch('/api/social/instagram').then((r) => r.json())
+        const tkRes = await fetch('/api/social/tiktok').then((r) => r.json())
+        if (tkRes?.videos?.length) {
+          setTkVideos(tkRes.videos)
         }
       } catch {
         // Feeds are non-critical — fail silently
@@ -92,19 +76,11 @@ const SocialFeedScene = () => {
         { opacity: 1, y: 0, duration: 0.8, ...shared },
       )
 
-      if (igRef.current) {
-        gsap.fromTo(
-          igRef.current,
-          { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 0.8, delay: 0.15, ...shared },
-        )
-      }
-
       if (tkRef.current) {
         gsap.fromTo(
           tkRef.current,
           { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 0.8, delay: 0.3, ...shared },
+          { opacity: 1, y: 0, duration: 0.8, delay: 0.15, ...shared },
         )
       }
     }, sectionRef)
@@ -112,7 +88,7 @@ const SocialFeedScene = () => {
     return () => ctx.revert()
   }, [loading])
 
-  const hasPosts = igPosts.length > 0 || tkVideos.length > 0
+  const hasPosts = tkVideos.length > 0
   const hidden = !loading && !hasPosts
 
   return (
@@ -132,42 +108,11 @@ const SocialFeedScene = () => {
 
         {loading && <SkeletonGrid />}
 
-        {/* Instagram */}
+        {/* Instagram disabled for now
         {igPosts.length > 0 && (
-          <div ref={igRef} className="w-full opacity-0">
-            <PlatformLabel
-              icon={<Instagram size={18} />}
-              name="Instagram @ tifo.mrkt"
-              href="https://www.instagram.com/tifo.mrkt/"
-            />
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
-              {igPosts.map((post) => (
-                <a
-                  key={post.id}
-                  href={post.permalink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative aspect-square overflow-hidden border border-white/10
-                             transition-all duration-300
-                             hover:border-[#D3AF37] hover:shadow-[0_0_20px_rgba(211,175,55,0.15)]"
-                >
-                  <img
-                    src={post.media_url}
-                    alt={post.caption || 'Instagram post'}
-                    loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
-                    <ExternalLink
-                      size={24}
-                      className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    />
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
+          <div ref={igRef} className="w-full opacity-0"> ... </div>
         )}
+        */}
 
         {/* TikTok */}
         {tkVideos.length > 0 && (
