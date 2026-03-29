@@ -44,6 +44,7 @@ export const products: Product[] = [
     images: [
       '/images/products/VintageBlackFront.jpg',
       '/images/products/VintageBlackback.jpg',
+      '/images/products/BlackLayedout.jpg',
     ],
     video: '/images/products/videos/BlackWashed.mp4',
     category: 'apparel',
@@ -91,8 +92,12 @@ export const products: Product[] = [
     details:
       '- 100% Cotton\n- Machine wash cold with like colors\n- Do not bleach\n- Do not iron on design\n- Tumble dry low, hang dry if possible\n\nAvailable: 6×S, 9×M, 8×L, 4×XL, 4×XXL',
     price: 4500,
-    image: '/images/products/TourneyShirt.png',
-    images: ['/images/products/TourneyShirt.png'],
+    image: '/images/products/Cup3.jpg',
+    images: [
+      '/images/products/Cup2.jpg',
+      '/images/products/Cup1.jpg',
+      '/images/products/Cup3.jpg',
+    ],
     category: 'apparel',
     sizes: ['S', 'M', 'L', 'XL', '2XL'],
   },
