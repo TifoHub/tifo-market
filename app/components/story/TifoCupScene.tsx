@@ -8,12 +8,12 @@ gsap.registerPlugin(ScrollTrigger)
 
 const TifoCupScene = () => {
   const sectionRef = useRef<HTMLElement>(null)
+  const badgeRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
-  const shirtRef = useRef<HTMLDivElement>(null)
-  const prizeRef = useRef<HTMLParagraphElement>(null)
-  const formatRef = useRef<HTMLParagraphElement>(null)
-  const addressRef = useRef<HTMLParagraphElement>(null)
-  const ctaRef = useRef<HTMLDivElement>(null)
+  const winnersRef = useRef<HTMLDivElement>(null)
+  const captionRef = useRef<HTMLParagraphElement>(null)
+  const thanksRef = useRef<HTMLParagraphElement>(null)
+  const partnerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -27,58 +27,58 @@ const TifoCupScene = () => {
         },
       })
 
+      // Badge drops in first
+      tl.fromTo(
+        badgeRef.current,
+        { opacity: 0, y: -20 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+      )
+
       // Title drops in
       tl.fromTo(
         titleRef.current,
         { opacity: 0, y: -60 },
         { opacity: 1, y: 0, duration: 1, ease: 'power2.out' },
+        '-=0.2',
       )
 
-      // Shirt scales up with a slight rotate
+      // Winners photo scales up
       tl.fromTo(
-        shirtRef.current,
-        { opacity: 0, scale: 0.7, rotation: -5 },
-        { opacity: 1, scale: 1, rotation: 0, duration: 1.4, ease: 'back.out(1.4)' },
+        winnersRef.current,
+        { opacity: 0, scale: 0.85 },
+        { opacity: 1, scale: 1, duration: 1.4, ease: 'back.out(1.2)' },
         '-=0.4',
       )
 
-      // Prize and format stagger in
+      // Caption staggered in
       tl.fromTo(
-        prizeRef.current,
+        captionRef.current,
         { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 0.8 },
         '-=0.3',
       )
 
       tl.fromTo(
-        formatRef.current,
+        thanksRef.current,
         { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 0.8 },
         '-=0.4',
       )
 
-      
       tl.fromTo(
-        addressRef.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8 },
-        '-=0.4',
-      )
-      // Contact CTA fades in
-      tl.fromTo(
-        ctaRef.current,
+        partnerRef.current,
         { opacity: 0, y: 20 },
         { opacity: 1, y: 0, duration: 0.8 },
         '-=0.3',
       )
 
       // Everything exits
-      tl.to(titleRef.current, { y: -40, opacity: 0, duration: 0.8 }, '+=0.5')
-      tl.to(shirtRef.current, { scale: 0.9, opacity: 0, duration: 0.8 }, '<')
-      tl.to(prizeRef.current, { y: -20, opacity: 0, duration: 0.8 }, '<')
-      tl.to(formatRef.current, { y: -20, opacity: 0, duration: 0.8 }, '<')
-      tl.to(addressRef.current, { y: -20, opacity: 0, duration: 0.8 }, '<')
-      tl.to(ctaRef.current, { y: -20, opacity: 0, duration: 0.8 }, '<')
+      tl.to(badgeRef.current, { y: -20, opacity: 0, duration: 0.8 }, '+=0.5')
+      tl.to(titleRef.current, { y: -40, opacity: 0, duration: 0.8 }, '<')
+      tl.to(winnersRef.current, { scale: 0.9, opacity: 0, duration: 0.8 }, '<')
+      tl.to(captionRef.current, { y: -20, opacity: 0, duration: 0.8 }, '<')
+      tl.to(thanksRef.current, { y: -20, opacity: 0, duration: 0.8 }, '<')
+      tl.to(partnerRef.current, { y: -20, opacity: 0, duration: 0.8 }, '<')
     }, sectionRef)
 
     return () => ctx.revert()
@@ -101,64 +101,67 @@ const TifoCupScene = () => {
         />
       </div>
 
+      {/* Past Event Badge */}
+      <div
+        ref={badgeRef}
+        className="opacity-0 z-10 mb-2 md:mb-3 px-4 py-1 border border-[#D3AF37]/60 rounded-full"
+      >
+        <span className="font-barlow text-xs md:text-sm uppercase tracking-widest text-[#D3AF37]">
+          Past Event · 02.28.2026
+        </span>
+      </div>
+
       {/* Title */}
       <h2
         ref={titleRef}
-        className="font-redzone text-center text-3xl md:text-8xl font-bold text-[#D3AF37] opacity-0 z-10 tracking-wider"
+        className="font-redzone text-center text-lg sm:text-2xl md:text-6xl font-bold text-[#D3AF37] opacity-0 z-10 tracking-wide px-6 leading-tight w-full max-w-[95vw]"
       >
-        MOTIONINDOOR X TIFO CUP | 02.28.2026
+        FIRST EVER TIFO CUP<br className="md:hidden" /> TOURNAMENT &amp; KIT SWAP
       </h2>
 
-      {/* Shirt image */}
+      {/* Winners photo */}
       <div
-        ref={shirtRef}
-        className="relative w-80 h-60 md:w-md md:h-128 my-2 md:my-6 opacity-0 z-10"
+        ref={winnersRef}
+        className="relative w-[340px] h-[200px] md:w-[640px] md:h-[380px] my-3 md:my-5 opacity-0 z-10 rounded-lg overflow-hidden shadow-2xl"
       >
         <Image
-          src="/images/products/TourneyShirt.png"
-          alt="Tifo Cup Shirt"
+          src="/images/TourneyWinners.jpeg"
+          alt="TIFO Cup Tournament Winners"
           fill
-          className="object-contain"
-          sizes="(max-width: 768px) 256px, 320px"
+          className="object-cover"
+          sizes="(max-width: 768px) 340px, 640px"
         />
       </div>
 
-      {/* Details */}
-      <div className="flex flex-col items-center gap-1 md:gap-3 z-10">
+      {/* Caption */}
+      <div className="flex flex-col items-center gap-2 md:gap-3 z-10 max-w-2xl px-6 text-center">
         <p
-          ref={prizeRef}
-          className="font-redzone text-2xl md:text-5xl font-bold text-white opacity-0 tracking-wide"
+          ref={captionRef}
+          className="font-barlow text-sm md:text-lg text-white/90 opacity-0 leading-relaxed"
         >
-          $10K PRIZE
+          Thanks to everyone who visited us this past weekend as we ventured out of the city for the first time!
         </p>
         <p
-          ref={formatRef}
-          className="font-redzone text-lg md:text-3xl font-medium text-white/80 opacity-0 tracking-widest"
+          ref={thanksRef}
+          className="font-barlow text-sm md:text-base text-white/70 opacity-0 leading-relaxed"
         >
-          5V5 TOURNAMENT 
-        </p>
-        <p
-          ref={addressRef}
-          className="font-redzone text-center text-base md:text-3xl font-medium text-white/80 opacity-0 tracking-widest px-4"
-        >
-          7003 S Cooper St, Arlington, TX 76001
+          Special thanks to the team at{' '}
+          <span className="text-[#D3AF37] font-semibold">@motionindoor</span>{' '}
+          for their hospitality &amp; collaboration — the space was amazing 🙌
         </p>
       </div>
 
-      {/* Contact CTA */}
+      {/* Partner callout */}
       <div
-        ref={ctaRef}
-        className="mt-3 md:mt-8 flex flex-col items-center gap-1 md:gap-2 opacity-0 z-10"
+        ref={partnerRef}
+        className="mt-4 md:mt-6 flex items-center gap-3 opacity-0 z-10"
       >
-        <p className="text-sm md:text-base text-white/50 uppercase tracking-widest font-barlow">
-          Register Now
-        </p>
-        <a
-          href="tel:4695318572"
-          className="font-barlow text-xl md:text-2xl font-semibold text-[#D3AF37] hover:text-white transition-colors duration-300"
-        >
-          469-531-8572
-        </a>
+        <span className="font-barlow text-xs md:text-sm uppercase tracking-widest text-white/40">
+          Proudly partnered with
+        </span>
+        <span className="font-barlow text-sm md:text-base font-bold tracking-widest text-[#D3AF37] uppercase">
+          Red Bull
+        </span>
       </div>
     </section>
   )
