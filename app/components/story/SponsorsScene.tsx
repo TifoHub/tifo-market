@@ -45,31 +45,24 @@ const SponsorsScene = () => {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
     const ctx = gsap.context(() => {
+      // Set initial state via GSAP so content is never stuck invisible if the trigger misfires
+      gsap.set([socialsRef.current, copyrightRef.current, devRef.current], { opacity: 0, y: 20 })
+
       const shared = {
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: 'top 80%',
+          start: 'top 85%',
           toggleActions: 'play none none reverse' as const,
+          invalidateOnRefresh: true,
         },
       }
 
-      gsap.fromTo(
-        socialsRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.8, ...shared },
-      )
+      gsap.to(socialsRef.current, { opacity: 1, y: 0, duration: 0.8, ...shared })
+      gsap.to(copyrightRef.current, { opacity: 1, y: 0, duration: 0.8, delay: 0.1, ...shared })
+      gsap.to(devRef.current, { opacity: 1, y: 0, duration: 0.8, delay: 0.2, ...shared })
 
-      gsap.fromTo(
-        copyrightRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.8, delay: 0.15, ...shared },
-      )
-
-      gsap.fromTo(
-        devRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.8, delay: 0.15, ...shared },
-      )
+      // Recalculate after pinned sections above have set up their spacers
+      ScrollTrigger.refresh()
     }, sectionRef)
 
     return () => ctx.revert()
@@ -85,7 +78,7 @@ const SponsorsScene = () => {
         {/* Social links */}
         <div
           ref={socialsRef}
-          className="flex items-center gap-8 opacity-0"
+          className="flex items-center gap-8"
         >
           {socialLinks.map((social) => (
             <a
@@ -106,13 +99,13 @@ const SponsorsScene = () => {
 
         <p
           ref={copyrightRef}
-          className="text-xs text-white/30 font-barlow tracking-widest uppercase opacity-0"
+          className="text-xs text-white/30 font-barlow tracking-widest uppercase"
         >
           &copy; {new Date().getFullYear()} Dallas Tifo Market
         </p>
         <p
           ref={devRef}
-          className="text-[10px] text-white/30 font-barlow tracking-widest uppercase opacity-0"
+          className="text-[10px] text-white/30 font-barlow tracking-widest uppercase"
         >
           Website by: <a href='https://www.osworld.dev/' target='_blank' rel='noopener noreferrer' className='text-green-400'>Os World</a>
         </p>
