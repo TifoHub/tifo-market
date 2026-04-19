@@ -10,6 +10,15 @@ function getStripe() {
   return new Stripe(key, { apiVersion: '2026-01-28.clover' })
 }
 
+/** Checkout Session payload fields used for fulfillment (Stripe types lag API). */
+type FulfillmentSession = Stripe.Checkout.Session & {
+  shipping_details?: {
+    name?: string | null
+    address?: Stripe.Address | null
+  } | null
+  shipping_cost?: { amount_total?: number | null } | null
+}
+
 async function decrementInventory(
   sessionId: string,
   stripe: Stripe,
@@ -86,13 +95,25 @@ export async function POST(req: Request) {
 
   switch (event.type) {
     case 'checkout.session.completed': {
-      const session = event.data.object as Stripe.Checkout.Session
+      const session = event.data.object as FulfillmentSession
       console.log(`Payment successful for session ${session.id}`)
       console.log(`Customer email: ${session.customer_details?.email}`)
       console.log(`Amount total: ${session.amount_total}`)
 
+      const shippingDetails = session.shipping_details
+      if (shippingDetails?.address) {
+        const a = shippingDetails.address
+        console.log(
+          `Ship to: ${[a.line1, a.line2].filter(Boolean).join(', ')}, ${a.city}, ${a.state} ${a.postal_code}, ${a.country}`,
+        )
+        if (shippingDetails.name) console.log(`Recipient: ${shippingDetails.name}`)
+      }
+      if (session.shipping_cost?.amount_total != null) {
+        console.log(`Shipping (cents): ${session.shipping_cost.amount_total}`)
+      }
+
       // TODO: Fulfill the order
-      // - Save order to database
+      // - Save order to database (use session.shipping_details + line items)
       // - Send confirmation email
 
       // Decrement inventory for purchased items

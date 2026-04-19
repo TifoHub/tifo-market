@@ -184,11 +184,14 @@ export default function CartSheet() {
           <SheetFooter className="border-t border-white/10 pt-4">
             <div className="w-full space-y-4">
               <div className="flex items-center justify-between font-barlow">
-                <span className="text-zinc-400 uppercase tracking-wider text-sm">Total</span>
+                <span className="text-zinc-400 uppercase tracking-wider text-sm">Subtotal</span>
                 <span className="text-2xl font-semibold text-[#D3AF37]">
                   {formatPrice(totalPrice)}
                 </span>
               </div>
+              <p className="text-center text-xs text-zinc-500 font-barlow leading-snug">
+                Shipping is selected and added on the secure checkout page.
+              </p>
               <Button
                 onClick={handleCheckout}
                 disabled={loading}
