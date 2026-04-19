@@ -7,7 +7,13 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useCart } from '@/app/context/CartContext'
-import { formatPrice, type Product, type Size } from '@/app/lib/products'
+import {
+  detailsWithoutStockLines,
+  formatPrice,
+  type Product,
+  type Size,
+} from '@/app/lib/products'
+import { normalizeInventoryRowSize, toInventoryQuantity } from '@/app/lib/inventory-size'
 import type { InventoryMap } from '@/app/lib/supabase'
 
 interface ProductCardProps {
@@ -27,12 +33,22 @@ export default function ProductCard({ product, inventoryMap }: ProductCardProps)
 
   const needsSize = product.sizes && product.sizes.length > 0
 
-  // Inventory helpers
+  // Inventory helpers (live Supabase map — independent of details text on the card)
   const productInventory = inventoryMap?.[product.id]
+
+  const qtyForSize = (inv: Record<string, number>, size: Size): number => {
+    const key = normalizeInventoryRowSize(size)
+    if (inv[key] !== undefined) return toInventoryQuantity(inv[key])
+    // Legacy rows keyed before normalization
+    if (size === '2XL' && inv['XXL'] !== undefined)
+      return toInventoryQuantity(inv['XXL'])
+    if (inv[size] !== undefined) return toInventoryQuantity(inv[size])
+    return 0
+  }
 
   const isSizeSoldOut = (size: Size): boolean => {
     if (!productInventory) return false
-    return (productInventory[size] ?? 0) <= 0
+    return qtyForSize(productInventory, size) <= 0
   }
 
   const isSoldOut = (() => {
@@ -57,6 +73,10 @@ export default function ProductCard({ product, inventoryMap }: ProductCardProps)
     accessories: 'Accessories',
     collectibles: 'Collectibles',
   }
+
+  const detailsForDisplay = product.details
+    ? detailsWithoutStockLines(product.details)
+    : ''
 
   const hasVideo = !!product.video
   const imageSlides = product.images && product.images.length > 0
@@ -234,13 +254,13 @@ export default function ProductCard({ product, inventoryMap }: ProductCardProps)
         <p className="text-sm text-zinc-400 leading-relaxed font-barlow">
           {product.description}
         </p>
-        {product.details && (
+        {detailsForDisplay && (
           <div className="space-y-1">
             <p className="text-xs text-zinc-500 font-barlow uppercase tracking-wider">
               Details
             </p>
             <p className="whitespace-pre-line text-xs text-zinc-500 leading-relaxed font-barlow">
-              {product.details}
+              {detailsForDisplay}
             </p>
           </div>
         )}
@@ -264,7 +284,7 @@ export default function ProductCard({ product, inventoryMap }: ProductCardProps)
                     disabled={soldOut}
                     className={`h-9 min-w-10 px-3 rounded-md border text-xs font-barlow font-medium uppercase tracking-wider transition-all duration-200
                       ${soldOut
-                        ? 'border-white/5 text-zinc-600 opacity-40 cursor-not-allowed line-through'
+                        ? 'border-zinc-700/60 bg-zinc-900/60 text-zinc-500 opacity-55 cursor-not-allowed line-through pointer-events-none'
                         : selectedSize === size
                           ? 'border-[#D3AF37] bg-[#D3AF37]/10 text-[#D3AF37]'
                           : 'border-white/10 text-zinc-400 hover:border-white/30 hover:text-white'

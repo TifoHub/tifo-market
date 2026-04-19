@@ -1,53 +1,58 @@
 'use client'
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useLayoutEffect } from 'react'
 import gsap from 'gsap'
 
+type SplashPhase = 'boot' | 'splash' | 'content'
+
 const SplashScreen = ({ children }: { children: React.ReactNode }) => {
-  const [showSplash, setShowSplash] = useState(false)
-  const [splashDone, setSplashDone] = useState(false)
+  const [phase, setPhase] = useState<SplashPhase>('boot')
   const overlayRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
 
-  useEffect(() => {
-    // Check if splash has already been shown this session
+  useLayoutEffect(() => {
     const hasPlayed = sessionStorage.getItem('splash-played')
-    if (!hasPlayed) {
-      setShowSplash(true)
-      // Prevent scrolling while splash is active
-      document.body.style.overflow = 'hidden'
+    if (hasPlayed) {
+      setPhase('content')
     } else {
-      setSplashDone(true)
+      document.body.style.overflow = 'hidden'
+      setPhase('splash')
+    }
+    return () => {
+      document.body.style.overflow = ''
     }
   }, [])
 
-  const handleVideoEnd = () => {
-    // Mark as played for this session
+  const finishSplash = () => {
     sessionStorage.setItem('splash-played', 'true')
-
-    // Animate the overlay out
     gsap.to(overlayRef.current, {
       opacity: 0,
       duration: 1,
       ease: 'power2.inOut',
       onComplete: () => {
-        setShowSplash(false)
-        setSplashDone(true)
+        setPhase('content')
         document.body.style.overflow = ''
       },
     })
   }
 
-  // Skip splash on click/tap
+  const handleVideoEnd = () => {
+    finishSplash()
+  }
+
   const handleSkip = () => {
-    if (videoRef.current) {
-      videoRef.current.pause()
-    }
-    handleVideoEnd()
+    videoRef.current?.pause()
+    finishSplash()
+  }
+
+  // Do not mount children during `boot` or `splash`. Mounting then unmounting
+  // breaks GSAP ScrollTrigger pin (reparents DOM) → React removeChild errors.
+  if (phase === 'boot') {
+    return <div className="min-h-screen bg-black" aria-busy="true" />
   }
 
   return (
     <>
-      {showSplash && (
+      {phase === 'splash' && (
         <div
           ref={overlayRef}
           className="fixed inset-0 z-50 bg-black flex items-center justify-center"
@@ -63,6 +68,7 @@ const SplashScreen = ({ children }: { children: React.ReactNode }) => {
             src="/scenesmedia/Tifo-Hero.mp4"
           />
           <button
+            type="button"
             onClick={handleSkip}
             className="absolute bottom-8 right-8 text-white/50 hover:text-white text-sm tracking-widest uppercase transition-colors"
           >
@@ -70,7 +76,7 @@ const SplashScreen = ({ children }: { children: React.ReactNode }) => {
           </button>
         </div>
       )}
-      {(splashDone || !showSplash) ? children : null}
+      {phase === 'content' && children}
     </>
   )
 }

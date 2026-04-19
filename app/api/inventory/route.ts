@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import { createPublicClient, type InventoryMap } from '@/app/lib/supabase'
+import { buildInventoryMapFromRows } from '@/app/lib/inventory-map'
+import { createPublicClient } from '@/app/lib/supabase'
 
 export async function GET() {
   try {
@@ -17,14 +18,7 @@ export async function GET() {
       )
     }
 
-    // Transform rows into { productId: { size: quantity } } map
-    const inventoryMap: InventoryMap = {}
-    for (const row of data ?? []) {
-      if (!inventoryMap[row.product_id]) {
-        inventoryMap[row.product_id] = {}
-      }
-      inventoryMap[row.product_id][row.size] = row.quantity
-    }
+    const inventoryMap = buildInventoryMapFromRows(data ?? [])
 
     return NextResponse.json(inventoryMap)
   } catch (err) {

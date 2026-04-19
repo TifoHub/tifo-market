@@ -51,6 +51,8 @@ const SocialFeedScene = () => {
         // Feeds are non-critical — fail silently
       } finally {
         setLoading(false)
+        // Collapsing this section changes page height; refresh pinned scenes above.
+        requestAnimationFrame(() => ScrollTrigger.refresh())
       }
     }
 
@@ -59,6 +61,9 @@ const SocialFeedScene = () => {
 
   useEffect(() => {
     if (loading) return
+    // Do not attach ScrollTriggers to a zero-height section (hidden when no posts).
+    // That breaks ScrollTrigger layout math and can block scrolling past Merch → Sponsors.
+    if (tkVideos.length === 0) return
 
     gsap.registerPlugin(ScrollTrigger)
     const ctx = gsap.context(() => {
@@ -86,7 +91,7 @@ const SocialFeedScene = () => {
     }, sectionRef)
 
     return () => ctx.revert()
-  }, [loading])
+  }, [loading, tkVideos.length])
 
   const hasPosts = tkVideos.length > 0
   const hidden = !loading && !hasPosts

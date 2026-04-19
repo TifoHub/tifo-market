@@ -20,7 +20,7 @@ export const products: Product[] = [
     description:
       'Premium t-shirt representing the greens of the pitch, getting you as game-ready as you feel—whether you are scoring bangers or grabbing coffee at the Kit Swap.',
     details:
-      '- 100% Cotton\n- Machine wash cold with like colors\n- Do not iron on design\n- Tumble dry low, hang dry if possible\n\nAvailable: 1×S, 3×M, 1×XL, 1×XXL',
+      '- 100% Cotton\n- Machine wash cold with like colors\n- Do not iron on design\n- Tumble dry low, hang dry if possible',
     price: 4000,
     image: '/images/products/Mint1.jpg',
     images: [
@@ -38,7 +38,7 @@ export const products: Product[] = [
     description:
       'From the streets to the rooftop, this oversized t-shirt is a solid choice for a vintage feel.',
     details:
-      '- 100% Cotton\n- Machine wash cold with like colors\n- Do not iron on design\n- Tumble dry low, hang dry if possible\n\nAvailable: 4×M, 2×L, 1×XL',
+      '- 100% Cotton\n- Machine wash cold with like colors\n- Do not iron on design\n- Tumble dry low, hang dry if possible',
     price: 4000,
     image: '/images/products/VintageBlackFront.jpg',
     images: [
@@ -56,7 +56,7 @@ export const products: Product[] = [
     description:
       'Oversized t-shirt for the fans of the game who love to show their passion.',
     details:
-      '- 100% Cotton\n- Machine wash cold with like colors\n- Do not iron on design\n- Tumble dry low, hang dry if possible\n\nAvailable: 1×M, 3×L, 1×XL, 1×XXL',
+      '- 100% Cotton\n- Machine wash cold with like colors\n- Do not iron on design\n- Tumble dry low, hang dry if possible',
     price: 4000,
     image: '/images/products/Pink1.jpg',
     images: [
@@ -74,7 +74,7 @@ export const products: Product[] = [
     description:
       'Classic t-shirt repping the home team—no matter where you are rocking the shirt, remember that you are Always at Home.',
     details:
-      '- 100% Cotton\n- Machine wash cold with like colors\n- Do not iron on design\n- Tumble dry low, hang dry if possible\n\nAvailable: 4×S, 7×M, 5×L, 2×XL, 1×XXL',
+      '- 100% Cotton\n- Machine wash cold with like colors\n- Do not iron on design\n- Tumble dry low, hang dry if possible',
     price: 3500,
     image: '/images/products/RegularTeeFront.jpg',
     images: [
@@ -90,7 +90,7 @@ export const products: Product[] = [
     description:
       'Built for champions on and off the pitch. TIFO CUP design on premium Shaka Wear Max Heavy t-shirt, preshrunk for a consistent fit.',
     details:
-      '- 100% Cotton\n- Machine wash cold with like colors\n- Do not bleach\n- Do not iron on design\n- Tumble dry low, hang dry if possible\n\nAvailable: 6×S, 9×M, 8×L, 4×XL, 4×XXL',
+      '- 100% Cotton\n- Machine wash cold with like colors\n- Do not bleach\n- Do not iron on design\n- Tumble dry low, hang dry if possible',
     price: 4500,
     image: '/images/products/Cup3.jpg',
     images: [
@@ -107,7 +107,7 @@ export const products: Product[] = [
     description:
       'Cozy hoodie repping the Dallas footy culture—for the cold nights on the pitch and those times you need a classic black hoodie to complete the fit.',
     details:
-      '- 60% Cotton\n- 40% Polyester\n- Machine wash cold with like colors\n- Do not iron on design\n- Tumble dry low\n\nAvailable: 1×S, 4×M, 5×L, 1×XL',
+      '- 60% Cotton\n- 40% Polyester\n- Machine wash cold with like colors\n- Do not iron on design\n- Tumble dry low',
     price: 4500,
     image: '/images/products/HoodieFront.jpg',
     images: [
@@ -142,6 +142,15 @@ export const products: Product[] = [
   //   category: 'accessories',
   // },
 ]
+
+/** Strips inventory lines (e.g. "Available: 2×S, …") from details shown on product cards. */
+export function detailsWithoutStockLines(details: string): string {
+  return details
+    .split('\n')
+    .filter((line) => !/^\s*available\s*:/i.test(line))
+    .join('\n')
+    .trimEnd()
+}
 
 export function formatPrice(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`

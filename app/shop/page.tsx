@@ -7,6 +7,8 @@ import { Button } from '@/components/ui/button'
 import ProductCard from '@/app/components/store/ProductCard'
 import CartSheet from '@/app/components/store/CartSheet'
 import { products, type Product } from '@/app/lib/products'
+import { buildInventoryMapFromRows } from '@/app/lib/inventory-map'
+import { normalizeInventoryRowSize, toInventoryQuantity } from '@/app/lib/inventory-size'
 import type { InventoryMap } from '@/app/lib/supabase'
 import { createPublicClient } from '@/app/lib/supabase'
 
@@ -31,35 +33,38 @@ export default function ShopPage() {
       .from('inventory')
       .select('product_id, size, quantity')
       .then(({ data }) => {
-        if (!data) return
-        const map: InventoryMap = {}
-        for (const row of data) {
-          if (!map[row.product_id]) map[row.product_id] = {}
-          map[row.product_id][row.size] = row.quantity
-        }
-        setInventoryMap(map)
+        setInventoryMap(data ? buildInventoryMapFromRows(data) : {})
       })
 
-    // Real-time subscription — fires whenever a row is updated (e.g. after a purchase)
+    const applyRow = (row: {
+      product_id: string
+      size: unknown
+      quantity: unknown
+    }) => {
+      const pid = row.product_id
+      const sizeKey = normalizeInventoryRowSize(row.size)
+      const qty = toInventoryQuantity(row.quantity)
+      setInventoryMap((prev) => ({
+        ...prev,
+        [pid]: {
+          ...(prev[pid] ?? {}),
+          [sizeKey]: qty,
+        },
+      }))
+    }
+
+    // Real-time — keep size keys normalized like the initial fetch
     const channel = supabase
       .channel('inventory-changes')
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'inventory' },
-        (payload) => {
-          const { product_id, size, quantity } = payload.new as {
-            product_id: string
-            size: string
-            quantity: number
-          }
-          setInventoryMap((prev) => ({
-            ...prev,
-            [product_id]: {
-              ...prev[product_id],
-              [size]: quantity,
-            },
-          }))
-        },
+        (payload) => applyRow(payload.new as { product_id: string; size: unknown; quantity: unknown }),
+      )
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'inventory' },
+        (payload) => applyRow(payload.new as { product_id: string; size: unknown; quantity: unknown }),
       )
       .subscribe()
 
