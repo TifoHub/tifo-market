@@ -64,6 +64,14 @@ const SocialFeedScene = () => {
     // Do not attach ScrollTriggers to a zero-height section (hidden when no posts).
     // That breaks ScrollTrigger layout math and can block scrolling past Merch → Sponsors.
     if (tkVideos.length === 0) return
+    const isMobile = window.matchMedia('(max-width: 767px)').matches
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
+
+    // Mobile viewport height is often too short to reliably hit this trigger.
+    // Keep content visible there and only animate on larger screens.
+    if (isMobile || prefersReducedMotion) return
 
     gsap.registerPlugin(ScrollTrigger)
     const ctx = gsap.context(() => {
@@ -106,7 +114,7 @@ const SocialFeedScene = () => {
         {/* Heading */}
         <h2
           ref={headingRef}
-          className="font-redzone text-4xl md:text-5xl font-bold text-[#D3AF37] tracking-wider opacity-0"
+          className="font-redzone text-4xl md:text-5xl font-bold text-[#D3AF37] tracking-wider"
         >
           ON THE FEED
         </h2>
@@ -121,7 +129,7 @@ const SocialFeedScene = () => {
 
         {/* TikTok */}
         {tkVideos.length > 0 && (
-          <div ref={tkRef} className="w-full opacity-0">
+          <div ref={tkRef} className="w-full">
             <PlatformLabel
               icon={<TikTokIcon className="w-[18px] h-[18px]" />}
               name="TikTok @ tifo.mrkt"
