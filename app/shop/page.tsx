@@ -114,6 +114,13 @@ export default function ShopPage() {
         </div>
       </section>
 
+      {/* Free Shipping Banner */}
+      <div className="border-b border-[#D3AF37]/10 bg-[#D3AF37]/5">
+        <p className="py-2 text-center font-barlow text-xs tracking-widest uppercase text-[#D3AF37]/70">
+          Free shipping on orders of 2 or more items
+        </p>
+      </div>
+
       {/* Filters */}
       <div className="border-b border-white/5">
         <div className="mx-auto max-w-7xl px-6 py-4">

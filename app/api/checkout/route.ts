@@ -54,13 +54,16 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'No items provided' }, { status: 400 })
     }
 
-    const standardCents = flatShippingCents()
-    const expressCents = expressShippingCents(standardCents)
+    const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0)
+    const freeShipping = totalQuantity >= 2
+
+    const standardCents = freeShipping ? 0 : flatShippingCents()
+    const expressCents = freeShipping ? null : expressShippingCents(standardCents)
 
     const shippingOptions: Stripe.Checkout.SessionCreateParams.ShippingOption[] = [
       {
         shipping_rate_data: {
-          display_name: 'Standard shipping',
+          display_name: freeShipping ? 'Free shipping' : 'Standard shipping',
           type: 'fixed_amount',
           fixed_amount: { amount: standardCents, currency: 'usd' },
         },

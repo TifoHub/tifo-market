@@ -189,9 +189,16 @@ export default function CartSheet() {
                   {formatPrice(totalPrice)}
                 </span>
               </div>
-              <p className="text-center text-xs text-zinc-500 font-barlow leading-snug">
-                Shipping is selected and added on the secure checkout page.
-              </p>
+              {totalItems === 1 && (
+                <p className="text-center text-xs font-barlow text-amber-400">
+                  Add 1 more item to unlock free shipping
+                </p>
+              )}
+              {totalItems >= 2 && (
+                <p className="text-center text-xs font-barlow text-emerald-400">
+                  Free shipping unlocked!
+                </p>
+              )}
               <Button
                 onClick={handleCheckout}
                 disabled={loading}
