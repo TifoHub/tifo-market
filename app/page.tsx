@@ -13,6 +13,7 @@ export default function Home() {
   return (
     <SplashScreen>
       <Navbar />
+      {/* Comment */}
       <main className="bg-black text-white">
         <IntroScene />
         <Breakdown />
