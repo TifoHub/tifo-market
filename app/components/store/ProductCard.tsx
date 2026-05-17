@@ -10,18 +10,16 @@ import { useCart } from '@/app/context/CartContext'
 import {
   detailsWithoutStockLines,
   formatPrice,
+  getProductVariantBySize,
   type Product,
   type Size,
 } from '@/app/lib/products'
-import { normalizeInventoryRowSize, toInventoryQuantity } from '@/app/lib/inventory-size'
-import type { InventoryMap } from '@/app/lib/supabase'
 
 interface ProductCardProps {
   product: Product
-  inventoryMap?: InventoryMap
 }
 
-export default function ProductCard({ product, inventoryMap }: ProductCardProps) {
+export default function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart()
   const [added, setAdded] = useState(false)
   const [selectedSize, setSelectedSize] = useState<Size | undefined>(
@@ -33,30 +31,21 @@ export default function ProductCard({ product, inventoryMap }: ProductCardProps)
 
   const needsSize = product.sizes && product.sizes.length > 0
 
-  // Inventory helpers (live Supabase map — independent of details text on the card)
-  const productInventory = inventoryMap?.[product.id]
-
-  const qtyForSize = (inv: Record<string, number>, size: Size): number => {
-    const key = normalizeInventoryRowSize(size)
-    if (inv[key] !== undefined) return toInventoryQuantity(inv[key])
-    // Legacy rows keyed before normalization
-    if (size === '2XL' && inv['XXL'] !== undefined)
-      return toInventoryQuantity(inv['XXL'])
-    if (inv[size] !== undefined) return toInventoryQuantity(inv[size])
-    return 0
-  }
+  const hasVariants = Boolean(product.variants?.length)
 
   const isSizeSoldOut = (size: Size): boolean => {
-    if (!productInventory) return false
-    return qtyForSize(productInventory, size) <= 0
+    if (hasVariants) {
+      const variant = getProductVariantBySize(product, size)
+      return variant ? !variant.availableForSale : true
+    }
+    return product.availableForSale === false
   }
 
   const isSoldOut = (() => {
-    if (!productInventory) return false
-    if (needsSize && product.sizes) {
-      return product.sizes.every((size) => isSizeSoldOut(size))
+    if (hasVariants) {
+      return product.variants!.every((variant) => !variant.availableForSale)
     }
-    return (productInventory['one-size'] ?? 0) <= 0
+    return product.availableForSale === false
   })()
 
   const handleAdd = () => {

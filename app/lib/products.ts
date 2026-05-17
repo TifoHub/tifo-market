@@ -1,4 +1,14 @@
 export type Size = 'S' | 'M' | 'L' | 'XL' | '2XL'
+export type Category = 'apparel' | 'accessories' | 'collectibles'
+
+export interface ProductVariant {
+  id: string
+  title: string
+  size?: Size
+  price: number
+  availableForSale: boolean
+  image?: string
+}
 
 export interface Product {
   id: string
@@ -9,8 +19,11 @@ export interface Product {
   video?: string
   price: number // in cents
   image: string
-  category: 'apparel' | 'accessories' | 'collectibles'
+  category: Category
   sizes?: Size[] // undefined = no size selection needed (e.g. posters)
+  handle?: string
+  availableForSale?: boolean
+  variants?: ProductVariant[]
 }
 
 export const products: Product[] = [
@@ -154,4 +167,18 @@ export function detailsWithoutStockLines(details: string): string {
 
 export function formatPrice(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`
+}
+
+export function isKnownSize(value: string): value is Size {
+  return ['S', 'M', 'L', 'XL', '2XL'].includes(value)
+}
+
+export function getProductVariantBySize(product: Product, size?: Size) {
+  if (!product.variants || product.variants.length === 0) return null
+
+  if (size) {
+    return product.variants.find((variant) => variant.size === size) ?? null
+  }
+
+  return product.variants[0] ?? null
 }

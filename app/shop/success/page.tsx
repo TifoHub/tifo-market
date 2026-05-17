@@ -9,7 +9,7 @@ export default function SuccessPage() {
   useEffect(() => {
     // Clear cart on success (in case it wasn't cleared before redirect)
     try {
-      localStorage.removeItem('tifo-market-cart')
+      localStorage.removeItem('tifo-market-shopify-cart-id')
     } catch {
       // ignore
     }
@@ -27,7 +27,7 @@ export default function SuccessPage() {
         </h1>
 
         <p className="font-barlow text-lg text-zinc-400 leading-relaxed">
-          Thank you for your purchase! You&apos;ll receive an email confirmation shortly with your order details.
+          Thank you for your purchase! You&apos;ll receive an email confirmation shortly with your order details and any shipping updates.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
