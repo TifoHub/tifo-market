@@ -6,11 +6,7 @@ import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import ProductCard from '@/app/components/store/ProductCard'
 import CartSheet from '@/app/components/store/CartSheet'
-import { products, type Product } from '@/app/lib/products'
-import { buildInventoryMapFromRows } from '@/app/lib/inventory-map'
-import { normalizeInventoryRowSize, toInventoryQuantity } from '@/app/lib/inventory-size'
-import type { InventoryMap } from '@/app/lib/supabase'
-import { createPublicClient } from '@/app/lib/supabase'
+import { type Product } from '@/app/lib/products'
 
 type Category = 'all' | Product['category']
 
@@ -23,53 +19,36 @@ const categories: { value: Category; label: string }[] = [
 
 export default function ShopPage() {
   const [activeCategory, setActiveCategory] = useState<Category>('all')
-  const [inventoryMap, setInventoryMap] = useState<InventoryMap>({})
+  const [products, setProducts] = useState<Product[]>([])
+  const [loadingProducts, setLoadingProducts] = useState(true)
 
   useEffect(() => {
-    const supabase = createPublicClient()
+    let cancelled = false
 
-    // Initial load
-    supabase
-      .from('inventory')
-      .select('product_id, size, quantity')
-      .then(({ data }) => {
-        setInventoryMap(data ? buildInventoryMapFromRows(data) : {})
-      })
-
-    const applyRow = (row: {
-      product_id: string
-      size: unknown
-      quantity: unknown
-    }) => {
-      const pid = row.product_id
-      const sizeKey = normalizeInventoryRowSize(row.size)
-      const qty = toInventoryQuantity(row.quantity)
-      setInventoryMap((prev) => ({
-        ...prev,
-        [pid]: {
-          ...(prev[pid] ?? {}),
-          [sizeKey]: qty,
-        },
-      }))
+    const loadProducts = async () => {
+      setLoadingProducts(true)
+      try {
+        const res = await fetch('/api/shopify/products', { cache: 'no-store' })
+        const data = await res.json() as { products?: Product[] }
+        if (!cancelled) {
+          setProducts(data.products ?? [])
+        }
+      } catch (error) {
+        console.error('Failed to load Shopify products:', error)
+        if (!cancelled) {
+          setProducts([])
+        }
+      } finally {
+        if (!cancelled) {
+          setLoadingProducts(false)
+        }
+      }
     }
 
-    // Real-time — keep size keys normalized like the initial fetch
-    const channel = supabase
-      .channel('inventory-changes')
-      .on(
-        'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'inventory' },
-        (payload) => applyRow(payload.new as { product_id: string; size: unknown; quantity: unknown }),
-      )
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'inventory' },
-        (payload) => applyRow(payload.new as { product_id: string; size: unknown; quantity: unknown }),
-      )
-      .subscribe()
+    void loadProducts()
 
     return () => {
-      supabase.removeChannel(channel)
+      cancelled = true
     }
   }, [])
 
@@ -146,17 +125,21 @@ export default function ShopPage() {
 
       {/* Product Grid */}
       <main className="mx-auto max-w-7xl px-6 py-12">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              inventoryMap={inventoryMap}
-            />
-          ))}
-        </div>
+        {loadingProducts ? (
+          <div className="py-24 text-center">
+            <p className="text-zinc-500 font-barlow text-lg">
+              Loading products...
+            </p>
+          </div>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
 
-        {filtered.length === 0 && (
+        {!loadingProducts && filtered.length === 0 && (
           <div className="py-24 text-center">
             <p className="text-zinc-500 font-barlow text-lg">
               No products in this category yet.

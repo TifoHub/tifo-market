@@ -19,7 +19,8 @@ import { formatPrice } from '@/app/lib/products'
 import Image from 'next/image'
 
 export default function CartSheet() {
-  const { items, updateQuantity, removeItem, totalItems, totalPrice, clearCart } = useCart()
+  const { items, updateQuantity, removeItem, totalItems, totalPrice, checkoutUrl, cartId } =
+    useCart()
   const [loading, setLoading] = useState(false)
 
   const handleCheckout = async () => {
@@ -27,28 +28,16 @@ export default function CartSheet() {
 
     setLoading(true)
     try {
-      const res = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items: items.map((item) => ({
-            productId: item.product.id,
-            size: item.size ?? 'one-size',
-            name: item.size
-              ? `${item.product.name} (${item.size})`
-              : item.product.name,
-            price: item.product.price,
-            quantity: item.quantity,
-            image: item.product.image,
-          })),
-        }),
-      })
-
-      const data = await res.json()
-
-      if (data.url) {
-        clearCart()
-        window.location.href = data.url
+      let url = checkoutUrl
+      if (!url && cartId) {
+        const res = await fetch(`/api/shopify/cart?cartId=${encodeURIComponent(cartId)}`, {
+          cache: 'no-store',
+        })
+        const data = (await res.json()) as { cart?: { checkoutUrl?: string } }
+        url = data.cart?.checkoutUrl
+      }
+      if (url) {
+        window.location.href = url
       }
     } catch (error) {
       console.error('Checkout error:', error)
@@ -215,7 +204,7 @@ export default function CartSheet() {
                 )}
               </Button>
               <p className="text-center text-xs text-zinc-500 font-barlow">
-                Secure checkout powered by Stripe
+                Secure checkout powered by Shopify
               </p>
             </div>
           </SheetFooter>
