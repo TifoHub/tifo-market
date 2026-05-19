@@ -139,7 +139,7 @@ const CommunityScene = () => {
         <section className="relative w-screen h-full shrink-0 flex items-center justify-center bg-black text-white overflow-hidden">
           <h2
             ref={labelRef}
-            className="absolute text-[#D3AF37] font-redzone text-4xl md:text-6xl font-bold opacity-0 z-10"
+            className="absolute text-[#D3AF37] font-redzone text-4xl md:text-6xl font-bold opacity-0 z-10 text-center"
           >
             THE COMMUNITY
           </h2>
