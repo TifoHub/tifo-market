@@ -83,7 +83,7 @@ const IntroScene = () => {
 
       <h1
         
-        className="text-5xl md:text-8xl text-[#D3AF37] font-bold  font-redzone "
+        className="text-4xl md:text-8xl text-[#D3AF37] font-bold  font-redzone "
       >
         DALLAS TIFO MARKET
       </h1>

@@ -119,7 +119,7 @@ const CollectionScene = () => {
       {/* Section heading */}
       <h2
         ref={headingRef}
-        className="absolute font-redzone top-16 text-6xl md:text-6xl font-bold opacity-0 z-10 text-[#D3AF37]"
+        className="absolute font-redzone top-16 text-4xl md:text-6xl font-bold opacity-0 z-10 text-[#D3AF37]"
       >
         THE COLLECTION
       </h2>
