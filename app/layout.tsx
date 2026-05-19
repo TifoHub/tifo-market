@@ -11,6 +11,7 @@ const barlow = Barlow({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.dallastifomarket.com'),
   title: 'Tifo Market',
   description: 'Rep the culture. Wear the identity.',
   icons: {
@@ -23,9 +24,9 @@ export const metadata: Metadata = {
     siteName: 'Tifo Market',
     images: [
       {
-        url: '/images/Logo-Meta.PNG',
-        width: 1200,
-        height: 630,
+        url: '/TIFO-LOGO%20-%201%201.PNG',
+        width: 2000,
+        height: 2000,
         alt: 'Tifo Market',
       },
     ],
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Tifo Market',
     description: 'Rep the culture. Wear the identity.',
-    images: ['/images/Logo-Meta.PNG'],
+    images: ['/TIFO-LOGO%20-%201%201.PNG'],
   },
 };
 
