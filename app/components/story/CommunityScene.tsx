@@ -8,25 +8,60 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
 }
 
-const topRowImages = [
-  { src: '/images/community/Community1 (1).JPG', alt: 'Community Event' },
-  { src: '/images/community/Community1 (2).JPG', alt: 'Community Event' },
-  { src: '/images/community/Community1 (3).JPG', alt: 'Community Event' },
-  { src: '/images/community/Community1 (4).jpg', alt: 'Community Event' },
-  { src: '/images/community/Community2.jpg', alt: 'Community Event' },
-  { src: '/images/community/Community6 (1).jpg', alt: 'Community Event' },
-  { src: '/images/community/Community6 (2).jpg', alt: 'Community Event' },
-]
+const COMMUNITY_IMAGE_FILES = [
+  '20250921_031102414_iOS.jpg',
+  '20250921_161128000_iOS.jpg',
+  '20250921_171208000_iOS.jpg',
+  '20250921_182802000_iOS.jpg',
+  '20250921_192802000_iOS.jpg',
+  '20251012_183934000_iOS.jpg',
+  '20251012_211429000_iOS.jpg',
+  '20251012_212820000_iOS.jpg',
+  '20251012_212849371_iOS.jpg',
+  '20251012_212906590_iOS.jpg',
+  '20251015_223508000_iOS 1.jpg',
+  '20251109_201349000_iOS 1.jpg',
+  '20251109_205243000_iOS.jpg',
+  '20251109_212412000_iOS.jpg',
+  '20251207_205456000_iOS.jpg',
+  '20260118_202323442_iOS.jpg',
+  '20260118_221243696_iOS.jpg',
+  '20260119_173746000_iOS.jpg',
+  '20260228_184315642_iOS.jpg',
+  '20260228_193912557_iOS.jpg',
+  '20260228_204039148_iOS.jpg',
+  '20260228_210159758_iOS.jpg',
+  '20260228_233137000_iOS.jpg',
+  '20260228_234222513_iOS 1.jpg',
+  '20260314_152138947_iOS.jpg',
+  '20260314_191326963_iOS.jpg',
+  '20260314_202602934_iOS.jpg',
+  '20260320_012210972_iOS.jpg',
+  '20260418_000600120_iOS.jpg',
+  '20260503_222529472_iOS.jpg',
+  '20260503_230641619_iOS.jpg',
+  '20260503_231402531_iOS.jpg',
+  '20260503_235755258_iOS.jpg',
+  '20260503_235805087_iOS.jpg',
+  '20260509_231826027_iOS.jpg',
+  '20260509_232109003_iOS.jpg',
+  '20260509_233211183_iOS 1.jpg',
+  '20260510_001452039_iOS.jpg',
+  '20260510_004921303_iOS.jpg',
+  '20260510_012748301_iOS.jpg',
+  '20260516_211848056_iOS.jpg',
+  '20260516_211848976_iOS.jpg',
+  '20260516_211850008_iOS.jpg',
+] as const
 
-const bottomRowImages = [
-  { src: '/images/community/Community1 (5).jpg', alt: 'Community Event' },
-  { src: '/images/community/Community1 (6).jpg', alt: 'Community Event' },
-  { src: '/images/community/Community1 (7).jpg', alt: 'Community Event' },
-  { src: '/images/community/Community3.jpg', alt: 'Community Event' },
-  { src: '/images/community/Community6 (1) (1).jpg', alt: 'Community Event' },
-  { src: '/images/community/Community6 (3).jpg', alt: 'Community Event' },
-  { src: '/images/community/Community6 (4).jpg', alt: 'Community Event' },
-]
+const communityImage = (filename: string) => ({
+  src: `/images/community/${encodeURIComponent(filename)}`,
+  alt: 'Community Event',
+})
+
+const communityImages = COMMUNITY_IMAGE_FILES.map(communityImage)
+const topRowImages = communityImages.filter((_, i) => i % 2 === 0)
+const bottomRowImages = communityImages.filter((_, i) => i % 2 === 1)
 
 const CommunityScene = () => {
   const wrapperRef = useRef<HTMLDivElement>(null)
