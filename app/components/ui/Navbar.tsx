@@ -10,7 +10,7 @@ const navLinks = [
   { label: 'Home', target: '#intro' },
   { label: 'Origins', target: '#breakdown' },
   { label: 'Collection', target: '#collection' },
-  { label: 'Tifo Cup', target: '#tifocup' },
+  { label: 'Events', target: '#events' },
   { label: 'Community', target: '#community' },
   { label: 'Merch', target: '#merch' },
   { label: 'Socials', target: '#sponsors' },
