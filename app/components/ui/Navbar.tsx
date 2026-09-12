@@ -13,7 +13,8 @@ const navLinks = [
   { label: 'Events', target: '#events' },
   { label: 'Community', target: '#community' },
   { label: 'Merch', target: '#merch' },
-  { label: 'Socials', target: '#sponsors' },
+  { label: 'Inquire', target: '#inquire' },
+  { label: 'Socials', target: '#socials' },
 ]
 
 const Navbar = () => {

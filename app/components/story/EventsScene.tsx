@@ -38,6 +38,19 @@ const withHandles = (text: string) =>
   )
 
 const EventMedia = ({ event }: { event: TifoEvent }) => {
+  if (event.media.type === 'placeholder') {
+    return (
+      <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-2xl border border-[#D3AF37]/30 bg-black/60 flex flex-col items-center justify-center gap-3 px-6 text-center">
+        <span className="font-barlow text-xs md:text-sm uppercase tracking-widest text-[#D3AF37]/80">
+          Image coming soon
+        </span>
+        <span className="font-redzone text-base md:text-2xl font-bold text-[#D3AF37] tracking-wide leading-tight">
+          {event.title}
+        </span>
+      </div>
+    )
+  }
+
   if (event.media.type === 'youtube') {
     return (
       <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-2xl bg-black">
@@ -194,7 +207,7 @@ const EventsScene = () => {
               <div className="flex flex-col items-start text-left">
                 <div className="mb-3 px-4 py-1 border border-[#D3AF37]/60 rounded-full">
                   <span className="font-barlow text-xs md:text-sm uppercase tracking-widest text-[#D3AF37]">
-                    {event.badge} · {event.date}
+                    {event.date ? `${event.badge} · ${event.date}` : event.badge}
                   </span>
                 </div>
 
@@ -237,7 +250,7 @@ const EventsScene = () => {
             <ChevronLeft size={20} />
           </button>
 
-          <div className="flex items-center gap-2" role="tablist" aria-label="Events">
+          <div className="flex items-center gap-2 flex-wrap justify-center max-w-[220px] md:max-w-none" role="tablist" aria-label="Events">
             {events.map((item, i) => (
               <button
                 key={item.id}

@@ -28,9 +28,6 @@ const CollectionScene = () => {
   const marqueeRef = useRef<HTMLDivElement>(null)
   const marqueeInnerRef = useRef<HTMLDivElement>(null)
   const taglineRef = useRef<HTMLParagraphElement>(null)
-  const stat1Ref = useRef<HTMLDivElement>(null)
-  const stat2Ref = useRef<HTMLDivElement>(null)
-  const stat3Ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
@@ -78,29 +75,10 @@ const CollectionScene = () => {
         { opacity: 1, y: 0, duration: 0.8 },
       )
 
-      // Stats fade in together
-      tl.fromTo(stat1Ref.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6 },
-      )
-      tl.fromTo(stat2Ref.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6 },
-        '-=0.4'
-      )
-      tl.fromTo(stat3Ref.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6 },
-        '-=0.4'
-      )
-
       // Everything exits
       tl.to(headingRef.current, { y: -40, opacity: 0, duration: 1 })
       tl.to(marqueeRef.current, { y: -30, opacity: 0, duration: 1 }, '<')
       tl.to(taglineRef.current, { y: -20, opacity: 0, duration: 1 }, '<')
-      tl.to(stat1Ref.current, { y: -20, opacity: 0, duration: 1 }, '<')
-      tl.to(stat2Ref.current, { y: -20, opacity: 0, duration: 1 }, '<')
-      tl.to(stat3Ref.current, { y: -20, opacity: 0, duration: 1 }, '<')
 
     }, sectionRef)
 
@@ -114,12 +92,12 @@ const CollectionScene = () => {
     <section
       id="collection"
       ref={sectionRef}
-      className="relative h-screen flex flex-col items-center justify-center bg-black text-white overflow-hidden"
+      className="relative h-screen flex flex-col items-center justify-center gap-10 md:gap-14 bg-black text-white overflow-hidden"
     >
       {/* Section heading */}
       <h2
         ref={headingRef}
-        className="absolute font-redzone top-16 text-4xl md:text-6xl font-bold opacity-0 z-10 text-[#D3AF37] text-center"
+        className="font-redzone text-4xl md:text-6xl font-bold opacity-0 z-10 text-[#D3AF37] text-center px-6"
       >
         THE COLLECTION
       </h2>
@@ -153,26 +131,10 @@ const CollectionScene = () => {
       {/* Tagline */}
       <p
         ref={taglineRef}
-        className="mt-10 font-redzone text-2xl md:text-3xl font-light tracking-widest text-white/80 opacity-0 z-10 text-center"
+        className="font-redzone text-2xl md:text-3xl font-light tracking-widest text-white/80 opacity-0 z-10 text-center px-6"
       >
         CURATED. AUTHENTIC. TIMELESS.
       </p>
-
-      {/* Stats */}
-      <div className="absolute bottom-16 flex gap-12 md:gap-24 z-10">
-        <div ref={stat1Ref} className="text-center opacity-0">
-          <span className="text-4xl md:text-6xl font-bold font-redzone">500+</span>
-          <p className="text-md md:text-base  mt-2  text-[#D3AF37]">Jerseys</p>
-        </div>
-        <div ref={stat2Ref} className="text-center opacity-0">
-          <span className="text-4xl md:text-6xl font-bold font-redzone">50+</span>
-          <p className="text-sm md:text-base  mt-2  text-[#D3AF37]">Clubs</p>
-        </div>
-        <div ref={stat3Ref} className="text-center opacity-0">
-          <span className="text-4xl md:text-6xl font-bold font-redzone">20+</span>
-          <p className="text-sm md:text-base  mt-2  text-[#D3AF37]">Countries</p>
-        </div>
-      </div>
     </section>
   )
 }

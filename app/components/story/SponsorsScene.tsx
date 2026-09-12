@@ -1,13 +1,6 @@
 'use client'
-import React, { useRef, useEffect } from 'react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import React from 'react'
 import { Instagram } from 'lucide-react'
-import Image from 'next/image'
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger)
-}
 
 const TikTokIcon = ({ className }: { className?: string }) => (
   <svg
@@ -38,74 +31,13 @@ const socialLinks = [
 ]
 
 const SponsorsScene = () => {
-  const sectionRef = useRef<HTMLElement>(null)
-  const sponsorImageRef = useRef<HTMLDivElement>(null)
-  const sponsorTitleRef = useRef<HTMLHeadingElement>(null)
-  const socialsRef = useRef<HTMLDivElement>(null)
-  const copyrightRef = useRef<HTMLParagraphElement>(null)
-  const devRef = useRef<HTMLParagraphElement>(null)
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger)
-    const ctx = gsap.context(() => {
-      // Set initial state via GSAP so content is never stuck invisible if the trigger misfires
-      gsap.set([sponsorTitleRef.current, sponsorImageRef.current, socialsRef.current, copyrightRef.current, devRef.current], { opacity: 0, y: 20 })
-
-      const shared = {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse' as const,
-          invalidateOnRefresh: true,
-        },
-      }
-
-      gsap.to(sponsorTitleRef.current, { opacity: 1, y: 0, duration: 0.8, ...shared })
-      gsap.to(sponsorImageRef.current, { opacity: 1, y: 0, duration: 0.8, ...shared })
-      gsap.to(socialsRef.current, { opacity: 1, y: 0, duration: 0.8, delay: 0.1, ...shared })
-      gsap.to(copyrightRef.current, { opacity: 1, y: 0, duration: 0.8, delay: 0.2, ...shared })
-      gsap.to(devRef.current, { opacity: 1, y: 0, duration: 0.8, delay: 0.3, ...shared })
-
-      // Recalculate after pinned sections above have set up their spacers
-      ScrollTrigger.refresh()
-    }, sectionRef)
-
-    return () => ctx.revert()
-  }, [])
-
   return (
-    <section
-      id="sponsors"
-      ref={sectionRef}
-      className="relative bg-black text-white py-20 px-6 overflow-hidden"
+    <footer
+      id="socials"
+      className="relative bg-black text-white py-16 px-6 overflow-hidden"
     >
       <div className="max-w-5xl mx-auto flex flex-col items-center gap-8">
-        <h2
-          ref={sponsorTitleRef}
-          className="font-barlow text-xs tracking-[0.35em] uppercase text-white/45"
-        >
-          Sponsors
-        </h2>
-
-        <div ref={sponsorImageRef} className="w-full flex justify-center">
-          <div className="relative w-full max-w-md rounded-xl border border-white/10 bg-white/3 px-4 py-3 shadow-[0_0_24px_rgba(211,175,55,0.06)]">
-            <div className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-b from-white/8 to-transparent" />
-            <Image
-              src="/SponsorBG.png"
-              alt="Sponsor"
-              width={1000}
-              height={600}
-              className="relative w-2/3 max-w-[130px] mx-auto h-auto object-contain opacity-60 saturate-70 contrast-105 transition-opacity duration-500 hover:opacity-80"
-              priority
-            />
-          </div>
-        </div>
-
-        {/* Social links */}
-        <div
-          ref={socialsRef}
-          className="flex items-center gap-8"
-        >
+        <div className="flex items-center gap-8">
           {socialLinks.map((social) => (
             <a
               key={social.label}
@@ -123,20 +55,22 @@ const SponsorsScene = () => {
           ))}
         </div>
 
-        <p
-          ref={copyrightRef}
-          className="text-xs text-white/30 font-barlow tracking-widest uppercase"
-        >
+        <p className="text-xs text-white/30 font-barlow tracking-widest uppercase">
           &copy; {new Date().getFullYear()} Dallas Tifo Market
         </p>
-        <p
-          ref={devRef}
-          className="text-[10px] text-white/30 font-barlow tracking-widest uppercase"
-        >
-          Website by: <a href='https://www.osworld.dev/' target='_blank' rel='noopener noreferrer' className='text-green-400'>Os World</a>
+        <p className="text-[10px] text-white/30 font-barlow tracking-widest uppercase">
+          Website by:{' '}
+          <a
+            href="https://www.osworld.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-green-400"
+          >
+            Os World
+          </a>
         </p>
       </div>
-    </section>
+    </footer>
   )
 }
 

@@ -7,13 +7,13 @@ const MerchScene = () => {
       id="merch"
       className="relative h-screen touch-pan-y bg-black text-white overflow-hidden"
     >
-      {/* White render video - full section, centered, looped, clickable */}
+      {/* Black Dallas Futbol render - full section, centered, looped, clickable */}
       <a
         href="/shop"
         className="absolute inset-0 w-full h-full z-1 flex touch-pan-y items-center justify-center cursor-pointer"
       >
         <video
-          src="/scenesmedia/whiterender.mp4"
+          src="/images/products/videos/BlackWashed.mp4"
           autoPlay
           loop
           muted
