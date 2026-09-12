@@ -97,30 +97,30 @@ const IntroScene = () => {
     <section
       id="intro"
       ref={sectionRef}
-      className="relative h-screen flex flex-col items-center justify-start pt-10 bg-black text-white overflow-hidden"
+      className="relative h-screen flex flex-col items-stretch md:items-center justify-start pt-16 md:pt-10 bg-black text-white overflow-hidden"
     >
-        <div className='m-5 opacity-0 z-10' ref={titleRef}>
+        <div className='relative z-10 px-5 mt-1 mb-2 md:m-5 shrink-0 opacity-0' ref={titleRef}>
 
       <h1
         
-        className="text-4xl md:text-8xl text-[#D3AF37] font-bold  font-redzone "
+        className="text-[1.65rem] leading-[1.05] sm:text-3xl md:text-8xl md:leading-none text-[#D3AF37] font-bold font-redzone"
       >
         DALLAS TIFO MARKET
       </h1>
         </div>
-      <div className='m-2 absolute top-35 left-0 px-5 max-w-2xl z-10'>
+      <div className='relative z-10 px-5 md:m-2 md:absolute md:top-35 md:left-0 md:max-w-2xl flex flex-col min-h-0'>
       <p ref={p1Ref}
-        className="mt-6 text-lg md:text-2xl text-white/90 max-w-[60vw] opacity-0"
+        className="mt-3 md:mt-6 text-sm leading-snug md:text-2xl md:leading-normal text-white/90 max-w-none md:max-w-[60vw] opacity-0"
       >
 Stemming from the need to establish a proper football community in Dallas comes the Dallas TIFO Market, 
 a space where fellow football lovers can 
 come socialize and share their love for the beautiful game through the exchange of memorabilia.
       </p>
-      <p ref={p2Ref} className="mt-6 text-lg md:text-2xl text-white/90 max-w-[60vw] opacity-0">
+      <p ref={p2Ref} className="mt-3 md:mt-6 text-sm leading-snug md:text-2xl md:leading-normal text-white/90 max-w-none md:max-w-[60vw] opacity-0">
       Although kits are our specialty, we invite all types of football collectors
        to join the community as we are all intertwined by one common passion, football.
       </p>
-      <p ref={p3Ref} className="mt-6 text-lg md:text-2xl text-white/90 max-w-[60vw] opacity-0">
+      <p ref={p3Ref} className="mt-3 md:mt-6 text-sm leading-snug md:text-2xl md:leading-normal text-white/90 max-w-none md:max-w-[60vw] opacity-0">
       This is the Dallas TIFO Market,
 always at home.
       </p>
@@ -128,7 +128,7 @@ always at home.
         ref={ctaRef}
         href="#contact"
         onClick={goToContact}
-        className="inline-block mt-8 px-8 py-3 border-2 border-[#D3AF37] text-[#D3AF37] font-redzone text-base md:text-xl
+        className="self-start inline-block mt-4 md:mt-8 px-5 py-2 md:px-8 md:py-3 border-2 border-[#D3AF37] text-[#D3AF37] font-redzone text-sm md:text-xl
                    tracking-widest uppercase opacity-0
                    transition-colors duration-300
                    hover:bg-[#D3AF37] hover:text-black hover:shadow-[0_0_30px_rgba(211,175,55,0.4)]"
