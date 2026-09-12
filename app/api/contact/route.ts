@@ -32,7 +32,7 @@ export async function POST(request: Request) {
 
   if (!inquiryTypes.includes(payload.inquiryType as (typeof inquiryTypes)[number])) {
     return NextResponse.json(
-      { ok: false, error: 'Please choose what this inquiry is about.' },
+      { ok: false, error: 'Please choose what this is about.' },
       { status: 400 },
     )
   }
@@ -75,14 +75,15 @@ export async function POST(request: Request) {
     }
 
     if (!response.ok || result.ok !== true) {
-      const needsGoogleAuth = /authorization needed|review permissions|access denied/i.test(text)
+      const needsGoogleAuth = /authorization needed|review permissions|access denied|accounts\.google\.com|signin/i.test(text)
+        || response.status === 401
       return NextResponse.json(
         {
           ok: false,
           error: result.error
             || (needsGoogleAuth
-              ? 'Google still needs permission to save this inquiry. Open the Apps Script web app once, click Review Permissions, then try again.'
-              : 'Unable to send your inquiry right now.'),
+              ? 'Google is still blocking submissions. In Apps Script: Deploy → Manage deployments → Edit → Who has access: Anyone, then Save. Open the web app URL once while logged into dallastifomarket@gmail.com to click Review Permissions if asked.'
+              : 'Unable to send your message right now.'),
         },
         { status: 502 },
       )
@@ -91,7 +92,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true })
   } catch {
     return NextResponse.json(
-      { ok: false, error: 'Unable to send your inquiry right now.' },
+      { ok: false, error: 'Unable to send your message right now.' },
       { status: 502 },
     )
   }

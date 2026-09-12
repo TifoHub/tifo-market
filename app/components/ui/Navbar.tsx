@@ -13,7 +13,7 @@ const navLinks = [
   { label: 'Events', target: '#events' },
   { label: 'Community', target: '#community' },
   { label: 'Merch', target: '#merch' },
-  { label: 'Inquire', target: '#inquire' },
+  { label: 'Contact', target: '#contact' },
   { label: 'Socials', target: '#socials' },
 ]
 

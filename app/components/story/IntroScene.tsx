@@ -2,9 +2,10 @@
 import React, { useRef, useEffect } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import Image from 'next/image'
 if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger)
+  gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 }
 
 const IntroScene = () => {
@@ -13,10 +14,11 @@ const IntroScene = () => {
   const p1Ref = useRef<HTMLParagraphElement>(null)
   const p2Ref = useRef<HTMLParagraphElement>(null)
   const p3Ref = useRef<HTMLParagraphElement>(null)
+  const ctaRef = useRef<HTMLAnchorElement>(null)
   const bgRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger)
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
     const ctx = gsap.context(() => {
       // Immediate fade in for title + background (plays once on load)
       gsap.fromTo(bgRef.current,
@@ -33,7 +35,7 @@ const IntroScene = () => {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=250%',
+          end: '+=280%',
           pin: true,
           scrub: 1,
           onLeave: () => {
@@ -63,15 +65,33 @@ const IntroScene = () => {
         { opacity: 1, y: 0, duration: 0.8 },
       )
 
-      // Paragraphs exit
-      tl.to(p1Ref.current, { y: -30, opacity: 0, duration: 1 })
+      tl.fromTo(ctaRef.current,
+        { opacity: 0, y: 24, scale: 0.92 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'back.out(1.6)' },
+      )
+
+      // Paragraphs + CTA exit
+      tl.to(p1Ref.current, { y: -30, opacity: 0, duration: 1 }, '+=0.4')
       tl.to(p2Ref.current, { y: -30, opacity: 0, duration: 1 }, '<')
       tl.to(p3Ref.current, { y: -30, opacity: 0, duration: 1 }, '<')
+      tl.to(ctaRef.current, { y: -20, opacity: 0, duration: 1 }, '<')
 
     }, sectionRef)
 
     return () => ctx.revert()
   }, [])
+
+  const goToContact = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    const el = document.querySelector('#contact')
+    if (!el) return
+    const pinSpacer = el.closest('.pin-spacer') || el
+    gsap.to(window, {
+      duration: 1.4,
+      scrollTo: { y: pinSpacer, offsetY: 0 },
+      ease: 'power2.inOut',
+    })
+  }
 
   return (
     <section
@@ -104,6 +124,17 @@ come socialize and share their love for the beautiful game through the exchange 
       This is the Dallas TIFO Market,
 always at home.
       </p>
+      <a
+        ref={ctaRef}
+        href="#contact"
+        onClick={goToContact}
+        className="inline-block mt-8 px-8 py-3 border-2 border-[#D3AF37] text-[#D3AF37] font-redzone text-base md:text-xl
+                   tracking-widest uppercase opacity-0
+                   transition-colors duration-300
+                   hover:bg-[#D3AF37] hover:text-black hover:shadow-[0_0_30px_rgba(211,175,55,0.4)]"
+      >
+        Contact
+      </a>
       </div>
       <div ref={bgRef} className="absolute inset-0 w-full h-full opacity-0">
         <Image

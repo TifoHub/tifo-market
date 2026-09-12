@@ -72,13 +72,13 @@ const InquireScene = () => {
       const result = await response.json().catch(() => ({ ok: false }))
 
       if (!response.ok || !result.ok) {
-        setError(result.error || 'Unable to send your inquiry right now.')
+        setError(result.error || 'Unable to send your message right now.')
         return
       }
 
       setSubmitted(true)
     } catch {
-      setError('Unable to send your inquiry right now.')
+      setError('Unable to send your message right now.')
     } finally {
       setSubmitting(false)
     }
@@ -86,7 +86,7 @@ const InquireScene = () => {
 
   return (
     <section
-      id="inquire"
+      id="contact"
       ref={sectionRef}
       className="relative min-h-screen flex flex-col items-center justify-center bg-black text-white overflow-x-hidden pt-24 pb-16 px-6"
     >
@@ -96,7 +96,7 @@ const InquireScene = () => {
       >
         <div className="flex flex-col items-start text-left md:pt-4">
           <h2 className="font-redzone text-4xl md:text-6xl font-bold text-[#D3AF37] tracking-wide mb-6">
-            INQUIRE
+            CONTACT
           </h2>
           <p className="font-barlow text-sm md:text-lg text-white/90 leading-relaxed mb-4">
             Looking to sponsor a drop, collab on a kit swap, or just get in the room?
@@ -109,7 +109,7 @@ const InquireScene = () => {
         {submitted ? (
           <div className="border border-[#D3AF37]/40 bg-white/5 p-8 md:p-10 min-h-[420px] flex flex-col justify-center">
             <span className="font-barlow text-xs uppercase tracking-widest text-[#D3AF37] mb-4">
-              Inquiry received
+              Message received
             </span>
             <h3 className="font-redzone text-2xl md:text-3xl text-[#D3AF37] mb-4">
               We got it.
