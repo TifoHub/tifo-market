@@ -2,7 +2,7 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { inquiryTypes } from '@/app/lib/inquiries'
+import { inquiryTypes, formatPhone, isCompletePhone } from '@/app/lib/inquiries'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -50,6 +50,12 @@ const InquireScene = () => {
     const form = e.currentTarget
     const data = new FormData(form)
 
+    if (phone && !isCompletePhone(phone)) {
+      setError('Please enter a 10-digit phone number, like (555) 000-0000.')
+      setSubmitting(false)
+      return
+    }
+
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -96,7 +102,7 @@ const InquireScene = () => {
             Looking to sponsor a drop, collab on a kit swap, or just get in the room?
           </p>
           <p className="font-barlow text-sm md:text-base text-white/60 leading-relaxed">
-            Partnerships, press, events, or anything we haven&apos;t thought of yet — tell us what you&apos;re working on and we&apos;ll get back to you.
+            Partnerships, press, events, or anything we haven&apos;t thought of yet, tell us what you&apos;re working on and we&apos;ll get back to you.
           </p>
         </div>
 
@@ -139,8 +145,10 @@ const InquireScene = () => {
                   type="tel"
                   inputMode="numeric"
                   autoComplete="tel"
+                  maxLength={14}
+                  title="Use a 10-digit number, like (555) 000-0000"
                   value={phone}
-                  onChange={(event) => setPhone(event.target.value.replace(/[^\d+\-().\s]/g, ''))}
+                  onChange={(event) => setPhone(formatPhone(event.target.value))}
                   className={fieldClass}
                   placeholder="(555) 000-0000"
                 />

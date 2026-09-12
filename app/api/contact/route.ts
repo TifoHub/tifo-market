@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { inquiryFields, inquiryTypes } from '@/app/lib/inquiries'
+import { inquiryFields, inquiryTypes, formatPhone, isCompletePhone } from '@/app/lib/inquiries'
 
 export async function POST(request: Request) {
   const webAppUrl = process.env.APPS_SCRIPT_WEBAPP_URL
@@ -47,14 +47,15 @@ export async function POST(request: Request) {
   payload.phone = String(body.phone ?? '').trim()
   payload.company = String(body.company ?? '').trim()
 
+  if (payload.phone && !isCompletePhone(payload.phone)) {
+    return NextResponse.json(
+      { ok: false, error: 'Please enter a 10-digit phone number, like (555) 000-0000.' },
+      { status: 400 },
+    )
+  }
+
   if (payload.phone) {
-    const phoneDigits = payload.phone.replace(/\D/g, '')
-    if (phoneDigits.length < 10 || /[A-Za-z]/.test(payload.phone)) {
-      return NextResponse.json(
-        { ok: false, error: 'Please enter a valid phone number with at least 10 digits.' },
-        { status: 400 },
-      )
-    }
+    payload.phone = formatPhone(payload.phone)
   }
 
   try {
