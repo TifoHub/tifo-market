@@ -40,7 +40,7 @@ const withHandles = (text: string) =>
 const EventMedia = ({ event }: { event: TifoEvent }) => {
   if (event.media.type === 'placeholder') {
     return (
-      <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-2xl border border-[#D3AF37]/30 bg-black/60 flex flex-col items-center justify-center gap-3 px-6 text-center">
+      <div className="relative w-full h-full min-h-0 rounded-lg overflow-hidden shadow-2xl border border-[#D3AF37]/30 bg-black/60 flex flex-col items-center justify-center gap-3 px-6 text-center">
         <span className="font-barlow text-xs md:text-sm uppercase tracking-widest text-[#D3AF37]/80">
           Image coming soon
         </span>
@@ -53,7 +53,7 @@ const EventMedia = ({ event }: { event: TifoEvent }) => {
 
   if (event.media.type === 'youtube') {
     return (
-      <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-2xl bg-black">
+      <div className="relative w-full h-full min-h-0 md:h-auto md:aspect-video rounded-lg overflow-hidden shadow-2xl bg-black">
         <iframe
           className="absolute inset-0 w-full h-full"
           src={`https://www.youtube.com/embed/${event.media.videoId}?rel=0`}
@@ -68,13 +68,13 @@ const EventMedia = ({ event }: { event: TifoEvent }) => {
   }
 
   return (
-    <div className="flex w-full items-center justify-center">
+    <div className="flex w-full h-full min-h-0 items-center justify-center">
       <Image
         src={event.media.src}
         alt={event.media.alt}
         width={event.media.width}
         height={event.media.height}
-        className="h-auto w-auto max-h-[65vh] max-w-full rounded-lg shadow-2xl"
+        className="h-full w-auto max-h-full max-w-full object-contain rounded-lg shadow-2xl md:h-auto md:max-h-[65vh]"
         sizes="(max-width: 768px) 90vw, 40vw"
       />
     </div>
@@ -151,7 +151,7 @@ const EventsScene = () => {
 
   const onPointerDown = (e: React.PointerEvent) => {
     if (e.pointerType !== 'touch') return
-    if ((e.target as HTMLElement).closest('iframe, button, a')) return
+    if ((e.target as HTMLElement).closest('iframe, button, a, [data-event-copy]')) return
     touchStartX.current = e.clientX
   }
 
@@ -167,7 +167,7 @@ const EventsScene = () => {
     <section
       id="events"
       ref={sectionRef}
-      className="relative min-h-screen flex flex-col items-center justify-start md:justify-center bg-black text-white overflow-x-hidden pt-24 pb-12 md:py-16"
+      className="relative h-dvh md:h-auto md:min-h-screen flex flex-col items-center justify-stretch md:justify-center bg-black text-white overflow-hidden md:overflow-x-hidden pt-16 pb-14 md:py-16"
     >
       <div className="absolute inset-0 w-full h-full">
         <Image
@@ -181,14 +181,14 @@ const EventsScene = () => {
 
       <div
         ref={contentRef}
-        className="relative z-10 w-full max-w-6xl mx-auto px-6 flex flex-col items-center opacity-0"
+        className="relative z-10 w-full max-w-6xl mx-auto px-5 md:px-6 flex flex-col flex-1 min-h-0 md:flex-none items-center opacity-0"
       >
-        <h2 className="font-redzone text-4xl md:text-6xl font-bold text-[#D3AF37] tracking-wide mb-8 md:mb-12">
+        <h2 className="shrink-0 font-redzone text-3xl md:text-6xl font-bold text-[#D3AF37] tracking-wide mb-2 md:mb-12">
           EVENTS
         </h2>
 
         <div
-          className="relative w-full min-h-[280px] md:min-h-[320px] overflow-hidden"
+          className="relative w-full flex-1 min-h-0 md:min-h-[320px] md:flex-none overflow-hidden"
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
         >
@@ -201,33 +201,36 @@ const EventsScene = () => {
               animate="center"
               exit="exit"
               transition={{ duration: 0.35, ease: 'easeOut' }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center"
+              className="absolute inset-0 md:relative md:inset-auto grid grid-cols-1 grid-rows-[minmax(0,0.95fr)_minmax(0,1.25fr)] md:grid-rows-1 md:grid-cols-2 gap-3 md:gap-12 items-stretch md:items-center"
             >
               <EventMedia event={event} />
 
-              <div className="flex flex-col items-start text-left">
-                <div className="mb-3 px-4 py-1 border border-[#D3AF37]/60 rounded-full">
+              <div
+                data-event-copy
+                className="flex flex-col items-start text-left min-h-0 overflow-y-auto overscroll-contain pr-1 md:overflow-visible"
+              >
+                <div className="mb-2 md:mb-3 px-3 md:px-4 py-0.5 md:py-1 border border-[#D3AF37]/60 rounded-full">
                   <span className="font-barlow text-xs md:text-sm uppercase tracking-widest text-[#D3AF37]">
                     {event.date ? `${event.badge} · ${event.date}` : event.badge}
                   </span>
                 </div>
 
-                <h3 className="font-redzone text-lg sm:text-xl md:text-3xl font-bold text-[#D3AF37] tracking-wide leading-tight mb-4">
+                <h3 className="font-redzone text-lg sm:text-xl md:text-3xl font-bold text-[#D3AF37] tracking-wide leading-tight mb-2 md:mb-4">
                   {event.title}
                 </h3>
 
-                <p className="font-barlow text-sm md:text-lg text-white/90 leading-relaxed">
+                <p className="font-barlow text-base md:text-lg text-white/90 leading-relaxed">
                   {event.description}
                 </p>
 
                 {event.thanks && (
-                  <p className="font-barlow text-sm md:text-base text-white/70 leading-relaxed mt-3">
+                  <p className="font-barlow text-sm md:text-base text-white/70 leading-relaxed mt-2 md:mt-3">
                     {withHandles(event.thanks)}
                   </p>
                 )}
 
                 {event.partner && (
-                  <div className="mt-5 flex items-center gap-3">
+                  <div className="mt-3 md:mt-5 flex items-center gap-2 md:gap-3 flex-wrap">
                     <span className="font-barlow text-xs md:text-sm uppercase tracking-widest text-white/40">
                       Proudly partnered with
                     </span>
@@ -241,7 +244,7 @@ const EventsScene = () => {
           </AnimatePresence>
         </div>
 
-        <div className="mt-8 md:mt-10 flex items-center gap-5">
+        <div className="shrink-0 mt-4 mb-1 md:mt-10 md:mb-0 flex items-center gap-5">
           <button
             type="button"
             onClick={() => paginate(-1)}
