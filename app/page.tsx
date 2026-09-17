@@ -6,7 +6,6 @@ import Navbar from "./components/ui/Navbar";
 import Breakdown from "./components/story/Breakdown";
 import EventsScene from "./components/story/EventsScene";
 import SocialFeedScene from "./components/story/SocialFeedScene";
-import MerchScene from "./components/story/MerchScene";
 import InquireScene from "./components/story/InquireScene";
 import SponsorsScene from "./components/story/SponsorsScene";
 
@@ -22,7 +21,6 @@ export default function Home() {
         <EventsScene />
         <CommunityScene />
         <SocialFeedScene />
-        <MerchScene />
         <InquireScene />
         <SponsorsScene />
       </main>

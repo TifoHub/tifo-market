@@ -85,7 +85,7 @@ export default function ShopPage() {
       <section className="border-b border-white/5 bg-linear-to-b from-zinc-950 to-black">
         <div className="mx-auto max-w-7xl px-6 py-16 text-center">
           <h2 className="font-redzone text-5xl md:text-7xl tracking-wider text-[#D3AF37] uppercase">
-            Merch
+            Collection
           </h2>
           <p className="mt-4 font-barlow text-lg text-zinc-400 tracking-widest uppercase">
             Rep the culture. Wear the identity.

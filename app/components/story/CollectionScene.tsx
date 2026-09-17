@@ -28,6 +28,7 @@ const CollectionScene = () => {
   const marqueeRef = useRef<HTMLDivElement>(null)
   const marqueeInnerRef = useRef<HTMLDivElement>(null)
   const taglineRef = useRef<HTMLParagraphElement>(null)
+  const merchRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
@@ -50,9 +51,9 @@ const CollectionScene = () => {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: '+=300%',
+          end: '+=420%',
           pin: true,
-          scrub: 1,
+          scrub: 1.2,
         },
       })
 
@@ -75,10 +76,19 @@ const CollectionScene = () => {
         { opacity: 1, y: 0, duration: 0.8 },
       )
 
-      // Everything exits
-      tl.to(headingRef.current, { y: -40, opacity: 0, duration: 1 })
-      tl.to(marqueeRef.current, { y: -30, opacity: 0, duration: 1 }, '<')
-      tl.to(taglineRef.current, { y: -20, opacity: 0, duration: 1 }, '<')
+      // Collection copy lifts out while the jersey video eases in
+      tl.to(headingRef.current, { y: -50, opacity: 0, duration: 1.2 })
+      tl.to(marqueeRef.current, { y: -40, opacity: 0, duration: 1.2 }, '<')
+      tl.to(taglineRef.current, { y: -30, opacity: 0, duration: 1.2 }, '<')
+      tl.fromTo(
+        merchRef.current,
+        { opacity: 0, y: 72, scale: 0.96, pointerEvents: 'none' },
+        { opacity: 1, y: 0, scale: 1, pointerEvents: 'auto', duration: 1.6, ease: 'power2.out' },
+        '-=1',
+      )
+
+      tl.to({}, { duration: 1.2 })
+      tl.to(merchRef.current, { y: -24, opacity: 0, duration: 1 })
 
     }, sectionRef)
 
@@ -94,10 +104,43 @@ const CollectionScene = () => {
       ref={sectionRef}
       className="relative h-screen flex flex-col items-center justify-center gap-10 md:gap-14 bg-black text-white overflow-hidden"
     >
+      <div
+        ref={merchRef}
+        className="absolute inset-0 z-20 opacity-0 pointer-events-none"
+      >
+        <a
+          href="/shop"
+          className="absolute inset-0 w-full h-full flex touch-pan-y items-center justify-center cursor-pointer"
+        >
+          <video
+            src="/images/products/videos/BlackWashed.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-contain pointer-events-none"
+          />
+        </a>
+
+        <div className="absolute bottom-16 md:bottom-12 left-0 right-0 flex flex-col items-center gap-2 md:gap-4 z-10">
+          <p className="font-barlow text-xl md:text-2xl text-white/70 tracking-widest uppercase">
+            Rep the culture.
+          </p>
+          <a
+            href="/shop"
+            className="px-10 py-4 border-2 border-[#D3AF37] text-[#D3AF37] font-redzone text-xl md:text-2xl
+                       tracking-widest uppercase
+                       transition-all duration-300
+                       hover:bg-[#D3AF37] hover:text-black hover:shadow-[0_0_30px_rgba(211,175,55,0.4)]"
+          >
+            SHOP NOW
+          </a>
+        </div>
+      </div>
       {/* Section heading */}
       <h2
         ref={headingRef}
-        className="font-redzone text-4xl md:text-6xl font-bold opacity-0 z-10 text-[#D3AF37] text-center px-6"
+        className="font-redzone text-4xl md:text-6xl font-bold opacity-0 relative z-10 text-[#D3AF37] text-center px-6"
       >
         THE COLLECTION
       </h2>
@@ -105,7 +148,7 @@ const CollectionScene = () => {
       {/* Infinite looping marquee */}
       <div
         ref={marqueeRef}
-        className="w-full overflow-hidden opacity-0 z-10"
+        className="w-full overflow-hidden opacity-0 relative z-10"
       >
         <div
           ref={marqueeInnerRef}
@@ -131,7 +174,7 @@ const CollectionScene = () => {
       {/* Tagline */}
       <p
         ref={taglineRef}
-        className="font-redzone text-2xl md:text-3xl font-light tracking-widest text-white/80 opacity-0 z-10 text-center px-6"
+        className="font-redzone text-2xl md:text-3xl font-light tracking-widest text-white/80 opacity-0 relative z-10 text-center px-6"
       >
         CURATED. AUTHENTIC. TIMELESS.
       </p>

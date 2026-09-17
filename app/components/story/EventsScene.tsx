@@ -68,13 +68,14 @@ const EventMedia = ({ event }: { event: TifoEvent }) => {
   }
 
   return (
-    <div className="relative w-full aspect-video rounded-lg overflow-hidden shadow-2xl">
+    <div className="flex w-full items-center justify-center">
       <Image
         src={event.media.src}
         alt={event.media.alt}
-        fill
-        className="object-cover"
-        sizes="(max-width: 768px) 90vw, 50vw"
+        width={event.media.width}
+        height={event.media.height}
+        className="h-auto w-auto max-h-[65vh] max-w-full rounded-lg shadow-2xl"
+        sizes="(max-width: 768px) 90vw, 40vw"
       />
     </div>
   )

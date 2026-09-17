@@ -6,15 +6,20 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollToPlugin, ScrollTrigger)
 
-const navLinks = [
+type NavLink = {
+  label: string
+  target: string
+  href?: string
+}
+
+const navLinks: NavLink[] = [
   { label: 'Home', target: '#intro' },
   { label: 'Origins', target: '#breakdown' },
-  { label: 'Collection', target: '#collection' },
+  { label: 'Collection', target: '#collection', href: '/shop' },
   { label: 'Events', target: '#events' },
   { label: 'Community', target: '#community' },
-  { label: 'Merch', target: '#merch' },
+  { label: 'Socials', target: '#social-feed' },
   { label: 'Contact', target: '#contact' },
-  { label: 'Socials', target: '#socials' },
 ]
 
 const Navbar = () => {
@@ -59,6 +64,7 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       for (const link of [...navLinks].reverse()) {
+        if (!link.target.startsWith('#')) continue
         const el = document.querySelector(link.target)
         if (el) {
           const spacer = el.closest('.pin-spacer') || el
@@ -102,10 +108,15 @@ const Navbar = () => {
     }
   }, [menuOpen])
 
-  const handleClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, target: string) => {
+  const handleClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, link: NavLink) => {
+    if (link.href) {
+      setMenuOpen(false)
+      return
+    }
+
     e.preventDefault()
     setMenuOpen(false)
-    const el = document.querySelector(target)
+    const el = document.querySelector(link.target)
     if (!el) return
 
     const pinSpacer = el.closest('.pin-spacer') || el
@@ -136,8 +147,8 @@ const Navbar = () => {
                   ref={(el) => {
                     if (el) linkRefs.current.set(link.target, el)
                   }}
-                  href={link.target}
-                  onClick={(e) => handleClick(e, link.target)}
+                  href={link.href ?? link.target}
+                  onClick={(e) => handleClick(e, link)}
                   className={`relative text-sm md:text-base font-barlow font-medium tracking-widest uppercase transition-colors duration-300 ${
                     active === link.target
                       ? 'text-[#D3AF37]'
@@ -185,8 +196,8 @@ const Navbar = () => {
           <a
             key={link.target}
             ref={(el) => { menuItemsRef.current[i] = el }}
-            href={link.target}
-            onClick={(e) => handleClick(e, link.target)}
+            href={link.href ?? link.target}
+            onClick={(e) => handleClick(e, link)}
             className={`font-redzone text-3xl tracking-widest uppercase opacity-0 transition-colors duration-300 ${
               active === link.target
                 ? 'text-[#D3AF37]'

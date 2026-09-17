@@ -22,13 +22,6 @@ const MerchScene = () => {
         />
       </a>
 
-      {/* MERCH - above model */}
-      <div className="absolute top-16 md:top-12 left-0 right-0 flex justify-center z-10">
-        <h2 className="font-redzone text-6xl md:text-8xl font-bold text-[#D3AF37] tracking-wider">
-          MERCH
-        </h2>
-      </div>
-
       {/* Rep the culture + CTA - below model */}
       <div className="absolute bottom-16 md:bottom-12 left-0 right-0 flex flex-col items-center gap-2 md:gap-4 z-10">
         <p className="font-barlow text-xl md:text-2xl text-white/70 tracking-widest uppercase">
