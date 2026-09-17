@@ -83,11 +83,11 @@ export default function ShopPage() {
 
       {/* Hero Banner */}
       <section className="border-b border-white/5 bg-linear-to-b from-zinc-950 to-black">
-        <div className="mx-auto max-w-7xl px-6 py-16 text-center">
-          <h2 className="font-redzone text-5xl md:text-7xl tracking-wider text-[#D3AF37] uppercase">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-10 sm:py-16 text-center">
+          <h2 className="font-redzone text-[clamp(1.6rem,8vw,4.5rem)] leading-none tracking-wide md:tracking-wider text-[#D3AF37] uppercase max-w-full">
             Collection
           </h2>
-          <p className="mt-4 font-barlow text-lg text-zinc-400 tracking-widest uppercase">
+          <p className="mt-4 font-barlow text-sm sm:text-lg text-zinc-400 tracking-widest uppercase">
             Rep the culture. Wear the identity.
           </p>
         </div>

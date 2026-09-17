@@ -10,7 +10,7 @@ const SplashScreen = ({ children }: { children: React.ReactNode }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
 
   useLayoutEffect(() => {
-    const hasPlayed = sessionStorage.getItem('splash-played-logo')
+    const hasPlayed = sessionStorage.getItem('splash-played-new-tifo')
     if (hasPlayed) {
       setPhase('content')
     } else {
@@ -23,7 +23,7 @@ const SplashScreen = ({ children }: { children: React.ReactNode }) => {
   }, [])
 
   const finishSplash = () => {
-    sessionStorage.setItem('splash-played-logo', 'true')
+    sessionStorage.setItem('splash-played-new-tifo', 'true')
     gsap.to(overlayRef.current, {
       opacity: 0,
       duration: 1,
@@ -65,7 +65,7 @@ const SplashScreen = ({ children }: { children: React.ReactNode }) => {
             muted
             playsInline
             onEnded={handleVideoEnd}
-            src="/scenesmedia/My_logo_video.mp4"
+            src="/scenesmedia/NewTifoVid.mp4"
           />
           <button
             type="button"
