@@ -22,8 +22,6 @@ const IntroScene = () => {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
     const ctx = gsap.context(() => {
-      let hintHidden = false
-
       // Immediate fade in for title + background (plays once on load)
       gsap.fromTo(bgRef.current,
         { opacity: 0, scale: 1.15 },
@@ -56,16 +54,14 @@ const IntroScene = () => {
           end: '+=280%',
           pin: true,
           scrub: 1,
-          onUpdate: (self) => {
-            if (hintHidden || self.progress <= 0.02) return
-            hintHidden = true
-            gsap.to(hintRef.current, { opacity: 0, y: -8, duration: 0.35 })
-          },
           onLeave: () => {
+            gsap.killTweensOf(hintRef.current)
+            gsap.to(hintRef.current, { opacity: 0, y: -8, duration: 0.35 })
             gsap.set(titleRef.current, { opacity: 0, y: -60 })
             gsap.set(bgRef.current, { opacity: 0 })
           },
           onEnterBack: () => {
+            gsap.to(hintRef.current, { opacity: 1, y: 0, duration: 0.45, ease: 'power2.out' })
             gsap.to(titleRef.current, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' })
             gsap.to(bgRef.current, { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' })
           },
