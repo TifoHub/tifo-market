@@ -9,7 +9,7 @@ if (typeof window !== 'undefined') {
 }
 
 const fieldClass =
-  'w-full bg-white/5 border border-white/15 px-4 py-3 font-barlow text-sm md:text-base text-white placeholder:text-white/30 outline-none rounded-none focus:border-[#D3AF37] transition-colors'
+  'w-full bg-white/5 border border-white/15 px-4 py-3 font-barlow text-base text-white placeholder:text-white/30 outline-none rounded-none focus:border-[#D3AF37] transition-colors'
 
 const InquireScene = () => {
   const sectionRef = useRef<HTMLElement>(null)

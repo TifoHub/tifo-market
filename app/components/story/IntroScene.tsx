@@ -16,10 +16,14 @@ const IntroScene = () => {
   const p3Ref = useRef<HTMLParagraphElement>(null)
   const ctaRef = useRef<HTMLAnchorElement>(null)
   const bgRef = useRef<HTMLDivElement>(null)
+  const hintRef = useRef<HTMLDivElement>(null)
+  const hintChevronRef = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
     const ctx = gsap.context(() => {
+      let hintHidden = false
+
       // Immediate fade in for title + background (plays once on load)
       gsap.fromTo(bgRef.current,
         { opacity: 0, scale: 1.15 },
@@ -30,6 +34,20 @@ const IntroScene = () => {
         { opacity: 1, y: 0, duration: 1.2, ease: 'power2.out', delay: 0.5 },
       )
 
+      gsap.fromTo(
+        hintRef.current,
+        { opacity: 0, y: 8 },
+        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', delay: 2 },
+      )
+      gsap.to(hintChevronRef.current, {
+        y: 6,
+        duration: 0.9,
+        repeat: -1,
+        yoyo: true,
+        ease: 'power1.inOut',
+        delay: 2,
+      })
+
       // Scroll-driven timeline for paragraphs and exit
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -38,6 +56,11 @@ const IntroScene = () => {
           end: '+=280%',
           pin: true,
           scrub: 1,
+          onUpdate: (self) => {
+            if (hintHidden || self.progress <= 0.02) return
+            hintHidden = true
+            gsap.to(hintRef.current, { opacity: 0, y: -8, duration: 0.35 })
+          },
           onLeave: () => {
             gsap.set(titleRef.current, { opacity: 0, y: -60 })
             gsap.set(bgRef.current, { opacity: 0 })
@@ -135,6 +158,26 @@ always at home.
       >
         Contact
       </a>
+      </div>
+      <div
+        ref={hintRef}
+        className="absolute bottom-5 md:bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 pointer-events-none opacity-0"
+        aria-hidden="true"
+      >
+        <span className="font-barlow text-[10px] tracking-[0.35em] uppercase text-[#D3AF37]/70">
+          Scroll
+        </span>
+        <span ref={hintChevronRef} className="block text-[#D3AF37]/80 leading-none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M6 9l6 6 6-6"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
       </div>
       <div ref={bgRef} className="absolute inset-0 w-full h-full opacity-0">
         <Image
