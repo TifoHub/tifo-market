@@ -11,10 +11,33 @@ export type TifoEvent = {
   description: string
   thanks?: string
   partner?: string
+  location?: { label: string; href: string }
   media: EventMedia
 }
 
 export const events: TifoEvent[] = [
+  {
+    id: 'hideaway-kit-swap',
+    title: 'Kit Swap',
+    date: '12.06.2026',
+    badge: 'Event',
+    description:
+      'We know it’s been a while, but TIFO returns with our final Kit Swap of the year. Join us December 6th, 11–5 PM at @hideawaytexas for one more event before 2026 comes to an end.',
+    thanks:
+      'Complimentary brew thanks to our friends at @peticolas, sounds by @nawmtombot and @chemdawwg_, and as always, endless jerseys. Come kick it.',
+    partner: 'Hideaway',
+    location: {
+      label: '240 N Bishop Ave #140',
+      href: 'https://www.google.com/maps/search/?api=1&query=240+N+Bishop+Ave+%23140',
+    },
+    media: {
+      type: 'image',
+      src: '/events/TIFO-Hideaway.png',
+      alt: 'TIFO Kit Swap at Hideaway, December 6',
+      width: 1080,
+      height: 1350,
+    },
+  },
   {
     id: 'tifo-retas-city-futsal',
     title: 'TIFO RETAS',

@@ -14,7 +14,7 @@ const IntroScene = () => {
   const p1Ref = useRef<HTMLParagraphElement>(null)
   const p2Ref = useRef<HTMLParagraphElement>(null)
   const p3Ref = useRef<HTMLParagraphElement>(null)
-  const ctaRef = useRef<HTMLAnchorElement>(null)
+  const ctaRef = useRef<HTMLDivElement>(null)
   const bgRef = useRef<HTMLDivElement>(null)
   const hintRef = useRef<HTMLDivElement>(null)
   const hintChevronRef = useRef<HTMLSpanElement>(null)
@@ -100,9 +100,9 @@ const IntroScene = () => {
     return () => ctx.revert()
   }, [])
 
-  const goToContact = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault()
-    const el = document.querySelector('#contact')
+    const el = document.querySelector(id)
     if (!el) return
     const pinSpacer = el.closest('.pin-spacer') || el
     gsap.to(window, {
@@ -143,17 +143,28 @@ come socialize and share their love for the beautiful game through the exchange 
       This is the Dallas TIFO Market,
 always at home.
       </p>
-      <a
-        ref={ctaRef}
-        href="#contact"
-        onClick={goToContact}
-        className="self-start inline-block mt-1 md:mt-3 px-6 py-2.5 md:px-8 md:py-3 border-2 border-[#D3AF37] text-[#D3AF37] font-redzone text-base md:text-xl
-                   tracking-widest uppercase opacity-0
-                   transition-colors duration-300
-                   hover:bg-[#D3AF37] hover:text-black hover:shadow-[0_0_30px_rgba(211,175,55,0.4)]"
-      >
-        Contact
-      </a>
+      <div ref={ctaRef} className="self-start flex flex-col items-start gap-2.5 mt-1 md:mt-3 opacity-0">
+        <a
+          href="#contact"
+          onClick={(e) => scrollToSection(e, '#contact')}
+          className="inline-block px-6 py-2.5 md:px-8 md:py-3 border-2 border-[#D3AF37] text-[#D3AF37] font-redzone text-base md:text-xl
+                     tracking-widest uppercase
+                     transition-colors duration-300
+                     hover:bg-[#D3AF37] hover:text-black hover:shadow-[0_0_30px_rgba(211,175,55,0.4)]"
+        >
+          Contact
+        </a>
+        <a
+          href="#events"
+          onClick={(e) => scrollToSection(e, '#events')}
+          className="inline-block px-4 py-1.5 md:px-5 md:py-2 border border-[#D3AF37]/70 text-[#D3AF37] font-redzone text-xs md:text-sm
+                     tracking-[0.2em] uppercase
+                     transition-colors duration-300
+                     hover:bg-[#D3AF37] hover:text-black hover:shadow-[0_0_20px_rgba(211,175,55,0.3)]"
+        >
+          Events
+        </a>
+      </div>
       </div>
       <div
         ref={hintRef}

@@ -29,9 +29,15 @@ const slideVariants = {
 const withHandles = (text: string) =>
   text.split(/(@\w+)/g).map((part, i) =>
     part.startsWith('@') ? (
-      <span key={i} className="text-[#D3AF37] font-semibold">
+      <a
+        key={i}
+        href={`https://www.instagram.com/${part.slice(1)}/`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-[#D3AF37] font-semibold hover:underline"
+      >
         {part}
-      </span>
+      </a>
     ) : (
       part
     ),
@@ -220,13 +226,24 @@ const EventsScene = () => {
                 </h3>
 
                 <p className="font-barlow text-base md:text-lg text-white/90 leading-relaxed">
-                  {event.description}
+                  {withHandles(event.description)}
                 </p>
 
                 {event.thanks && (
                   <p className="font-barlow text-sm md:text-base text-white/70 leading-relaxed mt-2 md:mt-3">
                     {withHandles(event.thanks)}
                   </p>
+                )}
+
+                {event.location && (
+                  <a
+                    href={event.location.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-barlow text-sm md:text-base text-[#D3AF37] font-semibold leading-relaxed mt-2 md:mt-3 hover:underline"
+                  >
+                    {event.location.label}
+                  </a>
                 )}
 
                 {event.partner && (
